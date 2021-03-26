@@ -21,7 +21,8 @@ public class CosSinFenster extends JFrame {
 		setBounds(10, 10, 600, 100);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);
-		setResizable(true);
+		//Größe nicht veränderbar
+		setResizable(false);
 	}
 	
 	/**
