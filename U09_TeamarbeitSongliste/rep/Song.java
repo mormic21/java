@@ -9,7 +9,7 @@ public class Song {
 	private String titel;
 	private String interpret;
 	private String album;
-	private int erscheinungsjahr = -1;
+	private int erscheinungsjahr;
 
 	/**
 	 * @return the titel
@@ -68,7 +68,10 @@ public class Song {
 	 *            the erscheinungsjahr to set
 	 */
 	public void setErscheinungsjahr(int erscheinungsjahr) {
-		this.erscheinungsjahr = erscheinungsjahr;
+		if (erscheinungsjahr < 0)
+			this.erscheinungsjahr = 0;
+		else
+			this.erscheinungsjahr = erscheinungsjahr;
 	}
 
 	/**

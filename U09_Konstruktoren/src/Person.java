@@ -142,18 +142,17 @@ public class Person {
 	public String toString() {
 		String mutter;
 		String vater;
-		if (this.getMutter() == null) {
+		//überprüft ob Mutterobjekt vorhanden ist, wenn nicht, wird der STring null ausgegeben
+		if (this.getMutter() == null)
 			mutter = "null";
-		}
-		else {
+		else 
 			mutter = this.getMutter().getName();
-		}
-		if (this.getVater() == null) {
+		//überprüft Vater-Objekt
+		if (this.getVater() == null) 
 			vater = "null";
-		}
-		else {
+		else 
 			vater = this.getVater().getName();
-		}
+		//rückgabe nummer, name, weiblich, vater + mutter
 		return this.getNumber()+": "+this.getName()+" w = "+this.isWeiblich()+" m = "+mutter+" v = "+vater;
 	}
 	
@@ -164,6 +163,7 @@ public class Person {
 	 */
 	public Person [] getEltern() {
 		Person [] ret = new Person [2];
+		//wenn Objekt vorhanden, wird ein neues mit dem Copy-Construktor erstellt
 		if (this.getMutter() != null)
 			ret[0] = new Person(this.getMutter());
 		if (this.getVater() != null)
@@ -178,6 +178,7 @@ public class Person {
 	 */
 	public Person [] getGrosseltern() {
 		Person [] ret = new Person [4];
+		//wenn Mutter-Objekt und Großmutter Objekt vorhanden, wird ein neues Objekt mit Copy-Construktor erstellt
 		if (this.getMutter() != null && this.getMutter().getMutter() != null)
 			ret [0] = new Person(this.getMutter().getMutter());
 		if (this.getMutter() != null && this.getMutter().getVater() != null)
