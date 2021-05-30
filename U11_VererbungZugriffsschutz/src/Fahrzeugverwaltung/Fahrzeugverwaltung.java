@@ -235,7 +235,7 @@ public class Fahrzeugverwaltung {
 					//Eigenschaften des Lastwagens werden geholt
 					int geschwindigkeit = fg.getGeschwindigkeit();
 					int kilometerstand = fg.getKilometerstand();
-					int ps = ((Auto) fg).getPs();
+					int ps = ((Lastwagen) fg).getPs();
 					int ladeflaeche = ((Lastwagen) fg).getLadeflaeche();
 					//Neues Lastwagen-Objekt wird erstellt und Eigenschaften gesetzt
 					Lastwagen l = new Lastwagen(geschwindigkeit, ps, ladeflaeche);
