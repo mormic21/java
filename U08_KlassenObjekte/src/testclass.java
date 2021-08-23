@@ -9,7 +9,6 @@ public class testclass {
 		Song s = new Song();
 		Song f = new Song();
 		String str = ";";
-		str.com
 		s.setInterpret("qwertz");
 		f.setInterpret("qwertz");
 		s.compareTo(f);

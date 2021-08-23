@@ -1,0 +1,9 @@
+package fressenUndGefressenWerden;
+
+public class Mauer extends UnbeweglichesObjekt{
+	
+	public Mauer() {
+		super("sandwich_small1.jpg");
+	}
+	
+}

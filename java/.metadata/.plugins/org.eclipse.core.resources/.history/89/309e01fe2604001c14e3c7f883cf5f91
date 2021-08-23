@@ -1,0 +1,17 @@
+package fressenUndGefressenWerden;
+
+public class SteuerbaresObjekt extends BeweglichesGutesObjekt{
+	
+	//Merkt sich die Punkte welche beim Fressen von beweglichen, "guten" Objekten erhalten werden
+	protected int punkte;
+	
+	/**
+	 * Erhält das Bild, welches dargestellt werden soll. Der Konstruktor 
+	 * sorgt dafür, dass das Objekt sich vorerst nicht im Fenster bewegt
+	 * @param dateiname, der das dazustellende Bild enthält
+	 */
+	public SteuerbaresObjekt(java.lang.String dateiname) {
+		super(dateiname);
+	}
+
+}
