@@ -2,17 +2,21 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Game over" key="selection"/>
+		<item value="punkte_t2" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="gewonnen_t"/>
+			<item value="gewonnen"/>
 			<item value="game over"/>
 			<item value="9"/>
 			<item value="0"/>
 		</list>
 		<list key="replacehistory">
+			<item value="punkte_t2"/>
+			<item value="punkte"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">

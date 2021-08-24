@@ -5,9 +5,12 @@ import java.awt.event.*;
 
 public class SpielGUI extends JFrame {
 	
-	private final int ANZAHL_UNBEWEGLICHE_OBJEKTE = 10;
+	private final int ANZAHL_UNBEWEGLICHE_OBJEKTE = 22;
 	private final int ANZAHL_GUTER_OBJEKTE = 5;
-	private final int ANZAHL_BOESER_OBJEKTE = 5;
+	private final int ANZAHL_BOESER_OBJEKTE = 3;
+	private JTextField gewonnen_t = null;
+	private JTextField punkte_t = null;
+	private JTextField punkte_t2 = null;
 	/**
 	 * Konstruktor
 	 */
@@ -20,7 +23,6 @@ public class SpielGUI extends JFrame {
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(null);
 		setVisible(true);
-		
 		// Positioniert unbewegliche Mauern im Fenster an zufällig ausgewählten Positionen
 		// so dass diese sich nicht überdecken
 		
@@ -66,10 +68,6 @@ public class SpielGUI extends JFrame {
 			y = (int)(Math.random()*400);
 		} while (hund.getObjektBei(x,y) != null);
 		hund.setLocation(x,y);
-		
-		
-		
-		
 		
     // Registrieren des Fenster-Schließen-Abhörers der das Fenster und folglich das
 		// Programm beendet
@@ -140,10 +138,78 @@ public class SpielGUI extends JFrame {
 					b.bewege();
 				}
 			}
+			if (h.getGestorben()) {
+				for (int i = 0; i < komponenten.length; i++) {
+					UnbeweglichesObjekt u = (UnbeweglichesObjekt)komponenten[i];
+					u.stirb();
+				}
+				gewonnen_t = new JTextField();
+				gewonnen_t.setBounds(15, 15, 360, 50);
+				gewonnen_t.setFont(new Font(null, Font.BOLD, 40));
+				gewonnen_t.setEditable(false);
+				gewonnen_t.setVisible(true);
+				gewonnen_t.setForeground(Color.red);
+				gewonnen_t.setHorizontalAlignment(JTextField.CENTER);
+				this.getContentPane().add(gewonnen_t);
+				gewonnen_t.setText("GAME OVER!");
+				//punkte
+				punkte_t = new JTextField();
+				punkte_t.setBounds(15, 80, 360, 50);
+				punkte_t.setFont(new Font(null, 0, 40));
+				punkte_t.setEditable(false);
+				punkte_t.setVisible(true);
+				punkte_t.setHorizontalAlignment(JTextField.CENTER);
+				this.getContentPane().add(punkte_t);
+				punkte_t.setText("Deine Punktezahl:");
+				//punktezahl
+				punkte_t2 = new JTextField();
+				punkte_t2.setBounds(15, 150, 360, 180);
+				punkte_t2.setFont(new Font(null, Font.BOLD, 150));
+				punkte_t2.setEditable(false);
+				punkte_t2.setVisible(true);
+				punkte_t2.setHorizontalAlignment(JTextField.CENTER);
+				this.getContentPane().add(punkte_t2);
+				punkte_t2.setText(String.valueOf(h.getPunkte()));
+				System.out.println("Game over!");
+				System.out.println("Erreichte Punktezahl: " + h.getPunkte());
+			}
+			if (h.getPunkte() == ANZAHL_GUTER_OBJEKTE) {
+				for (int i = 0; i < komponenten.length; i++) {
+					UnbeweglichesObjekt u = (UnbeweglichesObjekt)komponenten[i];
+					u.stirb();
+				}
+				gewonnen_t = new JTextField();
+				gewonnen_t.setBounds(15, 15, 360, 50);
+				gewonnen_t.setFont(new Font(null, Font.BOLD, 40));
+				gewonnen_t.setEditable(false);
+				gewonnen_t.setVisible(true);
+				gewonnen_t.setForeground(Color.GREEN);
+				gewonnen_t.setHorizontalAlignment(JTextField.CENTER);
+				this.getContentPane().add(gewonnen_t);
+				gewonnen_t.setText("GEWONNEN!");
+				//punkte
+				punkte_t = new JTextField();
+				punkte_t.setBounds(15, 80, 360, 50);
+				punkte_t.setFont(new Font(null, 0, 40));
+				punkte_t.setEditable(false);
+				punkte_t.setVisible(true);
+				punkte_t.setHorizontalAlignment(JTextField.CENTER);
+				this.getContentPane().add(punkte_t);
+				punkte_t.setText("Deine Punktezahl:");
+				//punktezahl
+				punkte_t2 = new JTextField();
+				punkte_t2.setBounds(15, 150, 360, 180);
+				punkte_t2.setFont(new Font(null, Font.BOLD, 150));
+				punkte_t2.setEditable(false);
+				punkte_t2.setVisible(true);
+				punkte_t2.setHorizontalAlignment(JTextField.CENTER);
+				this.getContentPane().add(punkte_t2);
+				punkte_t2.setText(String.valueOf(h.getPunkte()));
+				System.out.println("Gewonnen!");
+				System.out.println("Erreichte Punktezahl: " + h.getPunkte());
+			}
 		}
-		if (h.getGestorben() || h.getPunkte() == ANZAHL_GUTER_OBJEKTE) {
-			System.out.println("Game over");
-		}
+		
 		// Dieser Aufruf bewirkt, dass die normale (geerbte) paint-Methode des Formulars 
 		// aufgerufen wird, welche ihrerseits dafür sorgt, dass für alle Objekte des 
 		// contentPane des Formulars die paint-Methode gestartet wird

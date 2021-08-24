@@ -24,18 +24,11 @@ public class BeweglichesBoesesObjekt extends BeweglichesGutesObjekt{
 				Hund h = (Hund)(this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung), this.getY() + (int) Math.copySign(1, yRichtung)));
 				h.stirb();
 			}
-			
-			
-			
 			if (this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
 					this.getY() + (int) Math.copySign(1, yRichtung)) == null) {
 				this.setLocation(this.getX() + (int) Math.copySign(1, xRichtung),
 						this.getY() + (int) Math.copySign(1, yRichtung));
 			} else {
-//				//
-//				System.out.println(this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
-//						this.getY() + (int) Math.copySign(1, yRichtung)).getClass().toString());
-//				//
 				if (this.getObjektBei(this.getX() + ((int) Math.copySign(1, xRichtung) * -1),
 						this.getY() + (int) Math.copySign(1, yRichtung)) == null) {
 					this.setxRichtung(this.getxRichtung() * -1);
