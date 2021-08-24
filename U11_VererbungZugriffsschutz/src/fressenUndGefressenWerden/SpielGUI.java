@@ -6,13 +6,8 @@ import java.awt.event.*;
 public class SpielGUI extends JFrame {
 	
 	private final int ANZAHL_UNBEWEGLICHE_OBJEKTE = 10;
-	private final int ANZAHL_BEWEGLICHER_OBJEKTE = 15;
-	/*
-	 * Merkt sich die X-Richtung der Verschiebung. Ist richtung negativ, wird nach links
-	 * geschoben, ist richtung positiv, dann nach rechts
-	 */
-	private int richtung = 1;
-	
+	private final int ANZAHL_GUTER_OBJEKTE = 5;
+	private final int ANZAHL_BOESER_OBJEKTE = 5;
 	/**
 	 * Konstruktor
 	 */
@@ -28,6 +23,7 @@ public class SpielGUI extends JFrame {
 		
 		// Positioniert unbewegliche Mauern im Fenster an zufällig ausgewählten Positionen
 		// so dass diese sich nicht überdecken
+		
 		for (int i = 0; i < ANZAHL_UNBEWEGLICHE_OBJEKTE; i++) {
 			Mauer m = new Mauer();
 			contentPane.add(m);
@@ -39,8 +35,7 @@ public class SpielGUI extends JFrame {
 			} while (m.getObjektBei(x,y) != null);
 			m.setLocation(x,y);
 		}
-		BeweglichesGutesObjekt.setGeschwindigkeit(1);
-		for (int i = 0; i < ANZAHL_BEWEGLICHER_OBJEKTE; i++) {
+		for (int i = 0; i < ANZAHL_GUTER_OBJEKTE; i++) {
 			Sandwich s = new Sandwich();
 			contentPane.add(s);
 			int x = 0;
@@ -51,6 +46,30 @@ public class SpielGUI extends JFrame {
 			} while (s.getObjektBei(x,y) != null);
 			s.setLocation(x,y);
 		}
+		for (int i = 0; i < ANZAHL_BOESER_OBJEKTE; i++) {
+			Bombe b = new Bombe();
+			contentPane.add(b);
+			int x = 0;
+			int y = 0;
+			do {
+				x = (int)(Math.random()*400);
+				y = (int)(Math.random()*400);
+			} while (b.getObjektBei(x,y) != null);
+			b.setLocation(x,y);
+		}
+		Hund hund = new Hund();
+		contentPane.add(hund);
+		int x = 0;
+		int y = 0;
+		do {
+			x = (int)(Math.random()*400);
+			y = (int)(Math.random()*400);
+		} while (hund.getObjektBei(x,y) != null);
+		hund.setLocation(x,y);
+		
+		
+		
+		
 		
     // Registrieren des Fenster-Schließen-Abhörers der das Fenster und folglich das
 		// Programm beendet
@@ -71,12 +90,22 @@ public class SpielGUI extends JFrame {
      			switch (e.getKeyCode()) {
  	  				case 37: {
  	  					// Links
- 	  					richtung = -1;
+ 	  					hund.setxRichtung(-1);
+ 	  					break;
+ 	  				}
+ 	  				case 38: {
+ 	  					//oben
+ 	  					hund.setyRichtung(-1);
  	  					break;
  	  				}
     				case 39: {
     					// Rechts
-    					richtung = 1;
+    					hund.setxRichtung(1);
+    					break;
+    				}
+    				case 40: {
+    					//unten
+    					hund.setyRichtung(1);
     					break;
     				}
     			}
@@ -95,21 +124,25 @@ public class SpielGUI extends JFrame {
 	public void paint(Graphics g) {
 		// Hole alle Objekte des contentPanes des Formulars durch
 		Component[] komponenten = this.getContentPane().getComponents();
+		Hund h = new Hund();
 		if (komponenten != null && komponenten.length > 0) {
 			for (int i = 0; i < komponenten.length; i = i + 1) {
 				if (komponenten[i] instanceof Sandwich) {
 					Sandwich s = (Sandwich)(komponenten[i]);
 					s.bewege();
 				}
-				// Kontrolliere für alle Objekte im Formular ob sie in Richtung richtung
-				// verschoben werden können, ohne dass sie mit anderen Objekten oder dem 
-				// Fensterrand kollidieren
-				//UnbeweglichesObjekt u = (UnbeweglichesObjekt)(komponenten[i]);
-//				if (u.getObjektBei(u.getX() + richtung, u.getY()) == null)
-//					// Sollten die Objekte nicht kollidieren, werden sie in Richtung richtung
-//					// verschoben
-//					u.setLocation(u.getX() + richtung, u.getY());
+				else if (komponenten[i] instanceof Hund) {
+					h = (Hund)(komponenten[i]);
+					h.bewege();
+				}
+				else if (komponenten[i] instanceof Bombe) {
+					Bombe b = (Bombe)(komponenten[i]);
+					b.bewege();
+				}
 			}
+		}
+		if (h.getGestorben() || h.getPunkte() == ANZAHL_GUTER_OBJEKTE) {
+			System.out.println("Game over");
 		}
 		// Dieser Aufruf bewirkt, dass die normale (geerbte) paint-Methode des Formulars 
 		// aufgerufen wird, welche ihrerseits dafür sorgt, dass für alle Objekte des 

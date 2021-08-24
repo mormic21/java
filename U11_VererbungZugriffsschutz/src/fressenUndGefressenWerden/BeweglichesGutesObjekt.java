@@ -10,7 +10,7 @@ public class BeweglichesGutesObjekt extends UnbeweglichesObjekt {
 	 * Ist geschwindigkeit gleich 2, dann müssen die Richtungen zwischen 11 und 20
 	 * liegen. Bei 3 müssen sie zwischen 21 und 30 liegen, usw.
 	 */
-	protected static int geschwindigkeit;
+	protected static int geschwindigkeit = 1;
 
 	/**
 	 * X- und Y-Richtung des Objektes. Dabei müssen diese beiden Werte immer
@@ -136,6 +136,10 @@ public class BeweglichesGutesObjekt extends UnbeweglichesObjekt {
 				this.setLocation(this.getX() + (int) Math.copySign(1, xRichtung),
 						this.getY() + (int) Math.copySign(1, yRichtung));
 			} else {
+				//
+				System.out.println(this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
+						this.getY() + (int) Math.copySign(1, yRichtung)).getClass().toString());
+				//
 				if (this.getObjektBei(this.getX() + ((int) Math.copySign(1, xRichtung) * -1),
 						this.getY() + (int) Math.copySign(1, yRichtung)) == null) {
 					this.setxRichtung(this.getxRichtung() * -1);

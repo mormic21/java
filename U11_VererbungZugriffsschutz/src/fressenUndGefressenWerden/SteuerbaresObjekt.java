@@ -75,8 +75,51 @@ public class SteuerbaresObjekt extends BeweglichesGutesObjekt{
 		}
 	}
 	
+	/**
+	 * Versucht das Objekt in die eingestellte Richtung zu bewegen. 
+	 * Erfolgt bei der schrittweisen Bewegung des Objektes ein Zusammenprall 
+	 * mit einem unbeweglichen Objekt oder mit dem Fensterrand, so bleibt das
+	 * Objekt stehen. Erfolg die Kollision mit einem beweglichen,
+	 * "guten" Objekt, so wird dieses Objekt gefressen. Ein Objekt 
+	 * fressen bedeutet, dass das gefressene Objekt verschwindet und dass 
+	 * die Punkte des steuerbaren Objektes erhöht werden. Kollidiert das 
+	 * Objekt mit einem beweglichen, "bösen" Objekt, so stirbt das 
+	 * steuerbare Objekt
+	 */
+	@Override
 	public void bewege() {
+		int r = this.getxRichtung();
+		if(r == 0) {
+			r =  this.getyRichtung();
+		}
 		
+		for (int i = 0; i < Math.abs(r); i++) {
+			//alles frei
+			if (this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
+					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))) == null) {
+				this.setLocation((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
+					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit)));
+			}
+			//sandwich
+			else if (this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
+					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))).toString().indexOf("Sandwich") >= 0){
+				Sandwich s = (Sandwich) (this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
+						(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))));
+				s.stirb();
+				punkte++;
+			}
+			//bombe
+			else if(this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
+					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))).toString().indexOf("Bombe") >= 0){
+				this.stirb();
+			}
+			//mauer oder fensterrand
+			else if(this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
+					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))).toString().indexOf("Mauer") >= 0
+						|| this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
+							(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))).toString().indexOf("javax.swing.JPanel") >= 0){
+				this.setxRichtung(0);
+			}
+		}
 	}
-	
 }

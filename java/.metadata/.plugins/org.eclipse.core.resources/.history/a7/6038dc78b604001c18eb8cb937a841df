@@ -1,0 +1,167 @@
+package fressenUndGefressenWerden;
+
+import java.awt.Component;
+
+public class BeweglichesGutesObjekt extends UnbeweglichesObjekt {
+
+	/**
+	 * Die Geschwindigkeit der anzulegenden Objekte. Ist die geschwindigkeit gleich
+	 * 1, dann müssen die Beträge von X- und Y-Richtung zwischen 1 und 10 liegen.
+	 * Ist geschwindigkeit gleich 2, dann müssen die Richtungen zwischen 11 und 20
+	 * liegen. Bei 3 müssen sie zwischen 21 und 30 liegen, usw.
+	 */
+	protected static int geschwindigkeit;
+
+	/**
+	 * X- und Y-Richtung des Objektes. Dabei müssen diese beiden Werte immer
+	 * betragsmäßig gleich sein
+	 */
+	protected int xRichtung;
+
+	protected int yRichtung;
+
+	/**
+	 * Cunstructor Erhält das Bild, welches dargestellt werden soll. Im Konstruktor
+	 * wird auch - ausgehend von der eingestellten Geschwindigkeit für neu
+	 * anzulegende Objekte die Geschwindigkeit dieses Objektes folgendermaßen
+	 * bestimmt: Ist die Geschwindigkeit = 1, so wird dir X- und Y-Richtung auf
+	 * zufällige Werte zwischen 1 und 10 gesetzt. Dabei müssen X- und Y-Richtung
+	 * immer b etragsmäßig gleich gewählt werden. Wird beispielsweise die X-Richtung
+	 * auf -3 gesetzt, so darf die Y-Richtung nur auf 3 oder -3 gesetzt werden. Je
+	 * nach Geschwindigkeit müssen folgende Richtungen ermittelt werden:
+	 * geschwindigkeit = 1, Richtungen betragsmäßig zwischen 1 und 10
+	 * geschwindigkeit = 2, Richtungen betragsmäßig zwischen 11 und 20
+	 * geschwindigkeit = 3, Richtungen betragsmäßig zwischen 21 und 30
+	 * geschwindigkeit = 4, Richtungen betragsmäßig zwischen 31 und 40
+	 * 
+	 * @param dateiname,
+	 *            der das dazustellende Bild enthält
+	 */
+	public BeweglichesGutesObjekt(java.lang.String dateiname) {
+		super(dateiname);
+		// zufallsmäßige Richtungssetzung
+		int von = 1 + (10 * (getGeschwindigkeit() - 1));
+		int bis = 10 * getGeschwindigkeit();
+		int randrichtung = (int) (Math.random() * (bis - von + 1) + von);
+		setxRichtung(randrichtung);
+		// zufall vorzeichen
+		int randsign = (int) (Math.random() * (-2) + 0);
+		if (randsign == -1) {
+			setxRichtung(getxRichtung() * randsign);
+		}
+		randsign = (int) (Math.random() * (-2) + 0);
+		if (randsign == -1) {
+			setyRichtung(getyRichtung() * randsign);
+		}
+		System.out.println("x: " + getxRichtung() + " y: " + getyRichtung());
+	}
+
+	/**
+	 * Liefert die Geschwindigkeit alle neu anzulegenden Objekte zurück
+	 * 
+	 * @return die Geschwindigkeit aller neu anzulegenden Objekte
+	 */
+	public static int getGeschwindigkeit() {
+		return geschwindigkeit;
+	}
+
+	/**
+	 * Legt die Geschwindigkeit für alle neu anzulegenden Objekte fest. Die
+	 * Geschwindigkeit muss größer als 0 sein
+	 * 
+	 * @param geschwindigkeit
+	 *            the geschwindigkeit to set
+	 */
+	public static void setGeschwindigkeit(int geschwindigkeit) {
+		if (geschwindigkeit > 0) {
+			BeweglichesGutesObjekt.geschwindigkeit = geschwindigkeit;
+		} else {
+			BeweglichesGutesObjekt.geschwindigkeit = 1;
+		}
+	}
+
+	/**
+	 * Liefert die momentane X-Richtung des Objektes. Ist die Richtung negativ,
+	 * bewegt sich das Objekt nach links, sonst nach rechts
+	 * 
+	 * @return die XRichtung des Objektes
+	 */
+	public int getxRichtung() {
+		return xRichtung;
+	}
+
+	/**
+	 * Setzt die X-Richtung des Objektes. Dabei wird die Y-Richtung entsprechend
+	 * angepasst. X- und Y-Richtung müssen betragsmäßig immer gleich sein
+	 * 
+	 * @param xRichtung,
+	 *            die eingestellt werden soll
+	 */
+	public void setxRichtung(int xRichtung) {
+		this.xRichtung = xRichtung;
+		this.yRichtung = (int) Math.copySign(xRichtung, yRichtung);
+	}
+
+	/**
+	 * Liefert die momentane Y-Richtung des Objektes. Ist die Richtung negativ,
+	 * bewegt sich das Objekt nach oben, sonst nach unten
+	 * 
+	 * @return die yRichtung des Objektes
+	 */
+	public int getyRichtung() {
+		return yRichtung;
+	}
+
+	/**
+	 * Setzt die Y-Richtung des Objektes. Dabei wird die X-Richtung entsprechend
+	 * angepasst. X- und Y-Richtung müssen betragsmäßig immer gleich sein
+	 * 
+	 * @param yRichtung,
+	 *            die eingestellt werden soll
+	 */
+	public void setyRichtung(int yRichtung) {
+		this.yRichtung = yRichtung;
+		this.xRichtung = (int) Math.copySign(yRichtung, xRichtung);
+	}
+
+	/**
+	 * Versucht das Objekt in die eingestellte Richtung zu bewegen. Erfolgt bei der
+	 * schrittweisen Bewegung des Objektes ein Zusammenprall mit einem anderen
+	 * Objekt oder mit dem Fensterrand muss ausgewichen werden.
+	 */
+	public void bewege() {
+		for (int i = 0; i < Math.abs(getxRichtung()); i++) {
+			if (this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
+					this.getY() + (int) Math.copySign(1, yRichtung)) == null) {
+				this.setLocation(this.getX() + (int) Math.copySign(1, xRichtung),
+						this.getY() + (int) Math.copySign(1, yRichtung));
+			} else {
+				//
+				System.out.println(this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
+						this.getY() + (int) Math.copySign(1, yRichtung)).toString().substring(26).indexOf("Mauer"));
+				//
+				if (this.getObjektBei(this.getX() + ((int) Math.copySign(1, xRichtung) * -1),
+						this.getY() + (int) Math.copySign(1, yRichtung)) == null) {
+					this.setxRichtung(this.getxRichtung() * -1);
+					this.setLocation(this.getX() + (int) Math.copySign(1, xRichtung),
+							this.getY() + (int) Math.copySign(1, yRichtung));
+				} else {
+					if (this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
+							this.getY() + ((int) Math.copySign(1, yRichtung) * -1)) == null) {
+						this.setyRichtung(this.getyRichtung() * -1);
+						this.setLocation(this.getX() + (int) Math.copySign(1, xRichtung),
+								this.getY() + (int) Math.copySign(1, yRichtung));
+					} else {
+						if (this.getObjektBei(this.getX() + ((int) Math.copySign(1, xRichtung) * -1),
+								this.getY() + ((int) Math.copySign(1, yRichtung) * -1)) == null) {
+							this.setxRichtung(this.getxRichtung() * -1);
+							this.setyRichtung(this.getyRichtung() * -1);
+							this.setLocation(this.getX() + (int) Math.copySign(1, xRichtung),
+									this.getY() + (int) Math.copySign(1, yRichtung));
+						}
+					}
+				}
+			}
+		}
+	}
+}
