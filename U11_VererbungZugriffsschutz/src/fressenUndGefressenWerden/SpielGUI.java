@@ -5,12 +5,13 @@ import java.awt.event.*;
 
 public class SpielGUI extends JFrame {
 	
-	private final int ANZAHL_UNBEWEGLICHE_OBJEKTE = 22;
+	private final int ANZAHL_UNBEWEGLICHE_OBJEKTE = 12;
 	private final int ANZAHL_GUTER_OBJEKTE = 5;
 	private final int ANZAHL_BOESER_OBJEKTE = 3;
 	private JTextField gewonnen_t = null;
 	private JTextField punkte_t = null;
 	private JTextField punkte_t2 = null;
+	private JButton b = null;
 	/**
 	 * Konstruktor
 	 */
@@ -23,9 +24,7 @@ public class SpielGUI extends JFrame {
 		Container contentPane = this.getContentPane();
 		contentPane.setLayout(null);
 		setVisible(true);
-		// Positioniert unbewegliche Mauern im Fenster an zufällig ausgewählten Positionen
-		// so dass diese sich nicht überdecken
-		
+		// Positioniert Objekte
 		for (int i = 0; i < ANZAHL_UNBEWEGLICHE_OBJEKTE; i++) {
 			Mauer m = new Mauer();
 			contentPane.add(m);
@@ -138,10 +137,17 @@ public class SpielGUI extends JFrame {
 					b.bewege();
 				}
 			}
+			//wenn hund gestorben
 			if (h.getGestorben()) {
 				for (int i = 0; i < komponenten.length; i++) {
-					UnbeweglichesObjekt u = (UnbeweglichesObjekt)komponenten[i];
-					u.stirb();
+					if (komponenten[i] instanceof UnbeweglichesObjekt) {
+						UnbeweglichesObjekt u = (UnbeweglichesObjekt)komponenten[i];
+						u.stirb();
+					}
+					if (komponenten[i] instanceof BeweglichesGutesObjekt) {
+						BeweglichesGutesObjekt u = (BeweglichesGutesObjekt)komponenten[i];
+						u.stirb();
+					}
 				}
 				gewonnen_t = new JTextField();
 				gewonnen_t.setBounds(15, 15, 360, 50);
@@ -163,8 +169,8 @@ public class SpielGUI extends JFrame {
 				punkte_t.setText("Deine Punktezahl:");
 				//punktezahl
 				punkte_t2 = new JTextField();
-				punkte_t2.setBounds(15, 150, 360, 180);
-				punkte_t2.setFont(new Font(null, Font.BOLD, 150));
+				punkte_t2.setBounds(15, 150, 360, 140);
+				punkte_t2.setFont(new Font(null, Font.BOLD, 140));
 				punkte_t2.setEditable(false);
 				punkte_t2.setVisible(true);
 				punkte_t2.setHorizontalAlignment(JTextField.CENTER);
@@ -172,11 +178,31 @@ public class SpielGUI extends JFrame {
 				punkte_t2.setText(String.valueOf(h.getPunkte()));
 				System.out.println("Game over!");
 				System.out.println("Erreichte Punktezahl: " + h.getPunkte());
+				//ok-button
+				b = new JButton();
+				b.setBounds(15, 305, 360, 40);
+				b.setText("OK");
+				b.setFont(new Font("Arial", Font.ROMAN_BASELINE, 25));
+				this.getContentPane().add(b);
+				b.addActionListener(new ActionListener() {
+					// wenn action performed
+					public void actionPerformed(ActionEvent e) {
+						System.exit(0);
+					}
+				});
+				
 			}
+			//wenn alle Sandwiches gefressen
 			if (h.getPunkte() == ANZAHL_GUTER_OBJEKTE) {
 				for (int i = 0; i < komponenten.length; i++) {
-					UnbeweglichesObjekt u = (UnbeweglichesObjekt)komponenten[i];
-					u.stirb();
+					if (komponenten[i] instanceof UnbeweglichesObjekt) {
+						UnbeweglichesObjekt u = (UnbeweglichesObjekt)komponenten[i];
+						u.stirb();
+					}
+					if (komponenten[i] instanceof BeweglichesGutesObjekt) {
+						BeweglichesGutesObjekt u = (BeweglichesGutesObjekt)komponenten[i];
+						u.stirb();
+					}
 				}
 				gewonnen_t = new JTextField();
 				gewonnen_t.setBounds(15, 15, 360, 50);
@@ -198,15 +224,28 @@ public class SpielGUI extends JFrame {
 				punkte_t.setText("Deine Punktezahl:");
 				//punktezahl
 				punkte_t2 = new JTextField();
-				punkte_t2.setBounds(15, 150, 360, 180);
-				punkte_t2.setFont(new Font(null, Font.BOLD, 150));
+				punkte_t2.setBounds(15, 150, 360, 140);
+				punkte_t2.setFont(new Font(null, Font.BOLD, 140));
 				punkte_t2.setEditable(false);
 				punkte_t2.setVisible(true);
 				punkte_t2.setHorizontalAlignment(JTextField.CENTER);
 				this.getContentPane().add(punkte_t2);
 				punkte_t2.setText(String.valueOf(h.getPunkte()));
-				System.out.println("Gewonnen!");
+				System.out.println("Game over!");
 				System.out.println("Erreichte Punktezahl: " + h.getPunkte());
+				//ok-button
+				b = new JButton();
+				b.setBounds(15, 305, 360, 40);
+				b.setText("OK");
+				b.setFont(new Font("Arial", Font.ROMAN_BASELINE, 25));
+				this.getContentPane().add(b);
+				b.addActionListener(new ActionListener() {
+					// wenn action performed
+					public void actionPerformed(ActionEvent e) {
+						System.exit(0);
+					}
+				});
+				
 			}
 		}
 		

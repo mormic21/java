@@ -10,7 +10,7 @@ public class BeweglichesGutesObjekt extends UnbeweglichesObjekt {
 	 * Ist geschwindigkeit gleich 2, dann müssen die Richtungen zwischen 11 und 20
 	 * liegen. Bei 3 müssen sie zwischen 21 und 30 liegen, usw.
 	 */
-	protected static int geschwindigkeit = 2;
+	protected static int geschwindigkeit = 1;
 
 	/**
 	 * X- und Y-Richtung des Objektes. Dabei müssen diese beiden Werte immer
@@ -130,6 +130,7 @@ public class BeweglichesGutesObjekt extends UnbeweglichesObjekt {
 	 */
 	public void bewege() {
 		for (int i = 0; i < Math.abs(getxRichtung()); i++) {
+			//objekt kollidiert mit anderen objekten
 			if (this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
 					this.getY() + (int) Math.copySign(1, yRichtung)) == null) {
 				this.setLocation(this.getX() + (int) Math.copySign(1, xRichtung),
