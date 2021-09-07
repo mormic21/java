@@ -231,7 +231,7 @@ public class SpielGUI extends JFrame {
 				punkte_t2.setHorizontalAlignment(JTextField.CENTER);
 				this.getContentPane().add(punkte_t2);
 				punkte_t2.setText(String.valueOf(h.getPunkte()));
-				System.out.println("Game over!");
+				System.out.println("Gewonnen!");
 				System.out.println("Erreichte Punktezahl: " + h.getPunkte());
 				//ok-button
 				b = new JButton();
