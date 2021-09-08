@@ -1,7 +1,5 @@
 package net.tfobz.grundobjekte;
 
-import net.tfobz.spielobjekte.Hund;
-
 public class BeweglichesBoesesObjekt extends BeweglichesGutesObjekt{
 	
 	/**
@@ -19,13 +17,14 @@ public class BeweglichesBoesesObjekt extends BeweglichesGutesObjekt{
 	@Override
 	public void bewege() {
 		for (int i = 0; i < Math.abs(getxRichtung()); i++) {
-			//hund kollidiert mit bösem objekt
+			//steuerbaresObjekt kollidiert mit bösem objekt
 			if (this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
 					this.getY() + (int) Math.copySign(1, yRichtung)) != null
 					&& this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
-							this.getY() + (int) Math.copySign(1, yRichtung)).toString().indexOf("Hund") >= 0) {
-				Hund h = (Hund)(this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung), this.getY() + (int) Math.copySign(1, yRichtung)));
-				h.stirb();
+							this.getY() + (int) Math.copySign(1, yRichtung)) instanceof SteuerbaresObjekt) {
+				SteuerbaresObjekt s = (SteuerbaresObjekt)(this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung), this.getY() + (int) Math.copySign(1, yRichtung)));
+				s.stirb();
+				
 			}
 			//böses objekt kollidiert mit anderen objekten
 			if (this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),

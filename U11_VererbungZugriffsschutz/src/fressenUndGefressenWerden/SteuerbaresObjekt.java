@@ -100,24 +100,24 @@ public class SteuerbaresObjekt extends BeweglichesGutesObjekt{
 				this.setLocation((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
 					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit)));
 			}
-			//sandwich
+			//beweglichesGutesObjekt
 			else if (this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
-					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))).toString().indexOf("Sandwich") >= 0){
-				Sandwich s = (Sandwich) (this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
+					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))) instanceof BeweglichesGutesObjekt){
+				BeweglichesGutesObjekt b = (BeweglichesGutesObjekt) (this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
 						(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))));
-				s.stirb();
+				b.stirb();
 				punkte++;
 			}
-			//bombe
+			//beweglichesSchlchtesObjekt
 			else if(this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
-					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))).toString().indexOf("Bombe") >= 0){
+					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))) instanceof BeweglichesBoesesObjekt){
 				this.stirb();
 			}
-			//mauer oder fensterrand
+			//unbeweglichesObjekt oder fensterrand
 			else if(this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
-					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))).toString().indexOf("Mauer") >= 0
+					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))) instanceof UnbeweglichesObjekt
 						|| this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
-							(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))).toString().indexOf("javax.swing.JPanel") >= 0){
+							(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))) instanceof javax.swing.JPanel){
 				this.setxRichtung(0);
 			}
 		}

@@ -130,7 +130,6 @@ public class BeweglichesGutesObjekt extends UnbeweglichesObjekt {
 	 */
 	public void bewege() {
 		for (int i = 0; i < Math.abs(getxRichtung()); i++) {
-			//objekt kollidiert mit anderen objekten
 			if (this.getObjektBei(this.getX() + (int) Math.copySign(1, xRichtung),
 					this.getY() + (int) Math.copySign(1, yRichtung)) == null) {
 				this.setLocation(this.getX() + (int) Math.copySign(1, xRichtung),
