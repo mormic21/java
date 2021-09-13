@@ -84,6 +84,7 @@ public class TicTacToe {
 			}
 			ret = ret + "\n";
 		}
+		ret = ret.substring(0, ret.length()-1);
 		return ret;
 	}
 	
@@ -145,7 +146,6 @@ public class TicTacToe {
 			spalte = spalte - getFeldgroesse();
 			zeile++;
 		}
-		System.out.println("Debung: zeile, spalte: "+zeile+", "+spalte);
 		int spielret = getSpielfeld(zeile, spalte);
 		switch(spielret) {
 			case -3: {
@@ -283,11 +283,192 @@ public class TicTacToe {
 		}
 		return ret;
 	}
-
-
-
-
 	
+	/**
+	 * Ermittelt ob einer der Spieler das Spiel noch gewinnen kann
+	 * @return true falls das Spiel noch gewonnen werden kann
+	 */
+	public boolean getEinerKannGewinnen() {
+		
+		/**
+		 * NEW
+		 * aktul_player bestimmen:
+		 * 	wiviele felder von player1
+		 * 	wieviele felder von player2
+		 * 	wenn player1 = player2
+		 * 		dann akt_player = player1
+		 * 	sonst
+		 * 		player2
+		 * 
+		 * prozedere nur durführen für akt_player
+		 * zB: if(spielfeld == otherplayer) {
+		 * 			counter++;
+		 * }
+		 */
+		int felder_player1 = 0;
+		int felder_player2 = 0;
+		int otherplayer = 0;
+		boolean ret = false;
+		int counter = 0;
+		int feld;
+		
+		for (int i = 0; i < spielfeld.length; i++) {
+			for (int j = 0; j < spielfeld.length; j++) {
+				feld = getSpielfeld(i, j);
+				if (feld == SPIELER1) {
+					felder_player1++;
+				}
+				if (feld == SPIELER2) {
+					felder_player2++;
+				}
+			}
+		}
+		
+		if (felder_player1 == felder_player2) {
+			otherplayer = SPIELER2;
+		}
+		else {
+			otherplayer = SPIELER1;
+		}
+		
+		for (int i = 0; i < spielfeld.length; i++) {
+			for (int j = 0; j < spielfeld.length; j++) {
+				feld = getSpielfeld(i, j);
+				if (feld == otherplayer) {
+					counter++;
+				}
+			}
+			if (counter == 0) {
+				ret = true;
+			}
+			counter = 0;
+		}
+		if (!ret) {
+			for (int i = 0; i < spielfeld.length; i++) {
+				for (int j = 0; j < spielfeld.length; j++) {
+					feld = getSpielfeld(j, i);
+					if (feld == otherplayer) {
+						counter++;
+					}
+				}
+				if (counter == 0) {
+					ret = true;
+				}
+				counter = 0; 
+			}
+			if (!ret) {
+				int i = 0;
+				int j = 0;
+				while (i < getFeldgroesse()) {
+					feld = getSpielfeld(i, j);
+					if (feld == otherplayer) {
+						counter++;
+					}
+					i++;
+					j++;
+				}
+				if (counter == 0) {
+					ret = true;
+				}
+				counter = 0;
+				if (!ret) {
+					i = 0;
+					j = getFeldgroesse()-1;
+					while (i < getFeldgroesse()) {
+						feld = getSpielfeld(i, j);
+						if (feld == otherplayer) {
+							counter++;
+						}
+						i++;
+						j--;
+					}
+					if (counter == 0) {
+						ret = true;
+					}
+					counter = 0;
+				}
+			}
+		}
+		return ret;
+	}
+
+
+	/**
+	 * boolean ret = false;
+		int player = SPIELER1;
+		int counter = 0;
+		int n = 0;
+		int feld;
+		
+		while (n < 2) {
+			for (int i = 0; i < spielfeld.length; i++) {
+				for (int j = 0; j < spielfeld.length; j++) {
+					feld = getSpielfeld(i, j);
+					if (feld == player) {
+						counter++;
+					}
+				}
+				if (counter == 0) {
+					ret = true;
+					break;
+				}
+				counter = 0;
+			}
+			if (!ret) {
+				for (int i = 0; i < spielfeld.length; i++) {
+					for (int j = 0; j < spielfeld.length; j++) {
+						feld = getSpielfeld(j, i);
+						if (feld == player) {
+							counter++;
+						}
+					}
+					if (counter == 0) {
+						ret = true;
+						break;
+					}
+					counter = 0; 
+				}
+				if (!ret) {
+					int i = 0;
+					int j = 0;
+					while (i < getFeldgroesse()) {
+						feld = getSpielfeld(i, j);
+						if (feld == player) {
+							counter++;
+						}
+						i++;
+						j++;
+					}
+					if (counter == 0) {
+						ret = true;
+					}
+					counter = 0;
+					if (!ret) {
+						i = 0;
+						j = getFeldgroesse()-1;
+						while (i < getFeldgroesse()) {
+							feld = getSpielfeld(i, j);
+							if (feld == player) {
+								counter++;
+							}
+							i++;
+							j--;
+						}
+						if (counter == 0) {
+							ret = true;
+						}
+						counter = 0;
+					}
+				}
+			}
+			if (!ret) {
+				player = SPIELER2;
+				n++;
+			}
+			else {
+				n = 2;
+			}
+	 */
 
 	
 
