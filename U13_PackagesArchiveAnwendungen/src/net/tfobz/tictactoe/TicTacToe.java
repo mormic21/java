@@ -303,11 +303,14 @@ public class TicTacToe {
 		 * prozedere nur durführen für akt_player
 		 * zB: if(spielfeld == otherplayer) {
 		 * 			counter++;
-		 * }
+		 * 2 4 0 1 7 5 8 6 ok
+		 * 2 4 0 1 7 5 3 ???
+		 * 1 0 2 4 3 5 8 ende
 		 */
 		int felder_player1 = 0;
 		int felder_player2 = 0;
-		int otherplayer = 0;
+		int currentplayer;
+		int otherplayer;
 		boolean ret = false;
 		int counter = 0;
 		int feld;
@@ -323,14 +326,17 @@ public class TicTacToe {
 				}
 			}
 		}
-		
 		if (felder_player1 == felder_player2) {
+			currentplayer = SPIELER1;
 			otherplayer = SPIELER2;
 		}
 		else {
+			currentplayer = SPIELER2; 
 			otherplayer = SPIELER1;
 		}
-		
+		System.out.println("akuell " + currentplayer);
+		System.out.println("other " + otherplayer);
+		//
 		for (int i = 0; i < spielfeld.length; i++) {
 			for (int j = 0; j < spielfeld.length; j++) {
 				feld = getSpielfeld(i, j);
@@ -340,6 +346,7 @@ public class TicTacToe {
 			}
 			if (counter == 0) {
 				ret = true;
+				break;
 			}
 			counter = 0;
 		}
@@ -353,6 +360,7 @@ public class TicTacToe {
 				}
 				if (counter == 0) {
 					ret = true;
+					break;
 				}
 				counter = 0; 
 			}
@@ -386,6 +394,96 @@ public class TicTacToe {
 						ret = true;
 					}
 					counter = 0;
+					int spacecounter = 0;
+					if (!ret) {
+						System.out.println("i was here");
+						for (i = 0; i < spielfeld.length; i++) {
+							for (j = 0; j < spielfeld.length; j++) {
+								feld = getSpielfeld(i, j);
+								if (feld >= 0) {
+									spacecounter++;
+								}
+								if (feld == otherplayer) {
+									counter++;
+								}
+							}
+							System.out.println(getFeldgroesse()/2);
+							System.out.println("c"+counter);
+							System.out.println("feldgr"+getFeldgroesse());
+							System.out.println("sum"+(counter+spacecounter));
+							System.out.println("b1: "+(counter > (getFeldgroesse()/2)));
+							System.out.println("b2: "+(counter + spacecounter == getFeldgroesse()));
+							if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
+								System.out.println("true");
+								ret = true;
+								break;
+							}
+							counter = 0;
+							spacecounter = 0;
+						}
+						for (i = 0; i < spielfeld.length; i++) {
+							for (j = 0; j < spielfeld.length; j++) {
+								feld = getSpielfeld(j, i);
+								if (feld >= 0) {
+									spacecounter++;
+								}
+								if (feld == otherplayer) {
+									counter++;
+								}
+							}
+							if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
+								System.out.println("true");
+								ret = true;
+								break;
+							}
+							counter = 0;
+							spacecounter = 0;
+						}
+						i = 0;
+						j = 0;
+						while (i < getFeldgroesse()) {
+							feld = getSpielfeld(i, j);
+							if (feld >= 0) {
+								spacecounter++;
+							}
+							if (feld == otherplayer) {
+								counter++;
+							}
+							i++;
+							j++;
+						}
+						if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
+							ret = true;
+						}
+						counter = 0;
+						spacecounter = 0;
+					
+						i = 0;
+						j = getFeldgroesse()-1;
+						while (i < getFeldgroesse()) {
+							feld = getSpielfeld(i, j);
+							if (feld >= 0) {
+								spacecounter++;
+							}
+							if (feld == otherplayer) {
+								counter++;
+							}
+							i++;
+							j++;
+						}
+						if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
+							ret = true;
+						}
+						if (!ret) {
+							
+							if (!ret) {
+								
+								if (!ret) {
+									
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -468,6 +566,299 @@ public class TicTacToe {
 			else {
 				n = 2;
 			}
+	 */
+	
+	/**
+	 * 
+	 * 
+	 * VERSION 2.0 
+	 * 
+	 * 
+	 * int felder_player1 = 0;
+		int felder_player2 = 0;
+		int currentplayer = 0;
+		int otherplayer = 0;
+		boolean ret = false;
+		int counter = 0;
+		int feld;
+		
+		for (int i = 0; i < spielfeld.length; i++) {
+			for (int j = 0; j < spielfeld.length; j++) {
+				feld = getSpielfeld(i, j);
+				if (feld == SPIELER1) {
+					felder_player1++;
+				}
+				if (feld == SPIELER2) {
+					felder_player2++;
+				}
+			}
+		}
+		
+		if (felder_player1 == felder_player2) {
+			currentplayer = SPIELER1;
+			otherplayer = SPIELER2;
+		}
+		else {
+			currentplayer = SPIELER2; 
+			otherplayer = SPIELER1;
+		}
+		
+		for (int i = 0; i < spielfeld.length; i++) {
+			for (int j = 0; j < spielfeld.length; j++) {
+				feld = getSpielfeld(i, j);
+				if (feld == otherplayer) {
+					counter++;
+				}
+			}
+			if (counter == 0) {
+				ret = true;
+			}
+			counter = 0;
+		}
+		if (!ret) {
+			for (int i = 0; i < spielfeld.length; i++) {
+				for (int j = 0; j < spielfeld.length; j++) {
+					feld = getSpielfeld(j, i);
+					if (feld == otherplayer) {
+						counter++;
+					}
+				}
+				if (counter == 0) {
+					ret = true;
+				}
+				counter = 0; 
+			}
+			if (!ret) {
+				int i = 0;
+				int j = 0;
+				while (i < getFeldgroesse()) {
+					feld = getSpielfeld(i, j);
+					if (feld == otherplayer) {
+						counter++;
+					}
+					i++;
+					j++;
+				}
+				if (counter == 0) {
+					ret = true;
+				}
+				counter = 0;
+				if (!ret) {
+					i = 0;
+					j = getFeldgroesse()-1;
+					while (i < getFeldgroesse()) {
+						feld = getSpielfeld(i, j);
+						if (feld == otherplayer) {
+							counter++;
+						}
+						i++;
+						j--;
+					}
+					if (counter == 0) {
+						ret = true;
+					}
+					counter = 0;
+				}
+			}
+		}
+		return ret;
+	 */
+	/**
+	 * 
+	 * VERSION 3.0
+	 * 
+	 * 
+	 * 2 4 0 1 7 5 8 6  ERROR
+	* 2 4 0 1 7 5 3 OK
+	* 1 0 2 4 3 5 8 OK
+	*
+		int felder_player1 = 0;
+		int felder_player2 = 0;
+		int currentplayer;
+		int otherplayer;
+		boolean ret = false;
+		int counter = 0;
+		int feld;
+		
+		for (int i = 0; i < spielfeld.length; i++) {
+			for (int j = 0; j < spielfeld.length; j++) {
+				feld = getSpielfeld(i, j);
+				if (feld == SPIELER1) {
+					felder_player1++;
+				}
+				if (feld == SPIELER2) {
+					felder_player2++;
+				}
+			}
+		}
+		
+		if (felder_player1 == felder_player2) {
+			currentplayer = SPIELER1;
+			otherplayer = SPIELER2;
+		}
+		else {
+			currentplayer = SPIELER2; 
+			otherplayer = SPIELER1;
+		}
+		System.out.println("akuell " + currentplayer);
+		System.out.println("other " + otherplayer);
+		//
+		for (int i = 0; i < spielfeld.length; i++) {
+			for (int j = 0; j < spielfeld.length; j++) {
+				feld = getSpielfeld(i, j);
+				if (feld == otherplayer) {
+					counter++;
+				}
+			}
+			if (counter == 0) {
+				ret = true;
+				break;
+			}
+			counter = 0;
+		}
+		if (!ret) {
+			for (int i = 0; i < spielfeld.length; i++) {
+				for (int j = 0; j < spielfeld.length; j++) {
+					feld = getSpielfeld(j, i);
+					if (feld == otherplayer) {
+						counter++;
+					}
+				}
+				if (counter == 0) {
+					ret = true;
+					break;
+				}
+				counter = 0; 
+			}
+			if (!ret) {
+				int i = 0;
+				int j = 0;
+				while (i < getFeldgroesse()) {
+					feld = getSpielfeld(i, j);
+					if (feld == otherplayer) {
+						counter++;
+					}
+					i++;
+					j++;
+				}
+				if (counter == 0) {
+					ret = true;
+				}
+				counter = 0;
+				if (!ret) {
+					i = 0;
+					j = getFeldgroesse()-1;
+					while (i < getFeldgroesse()) {
+						feld = getSpielfeld(i, j);
+						if (feld == otherplayer) {
+							counter++;
+						}
+						i++;
+						j--;
+					}
+					if (counter == 0) {
+						ret = true;
+					}
+					counter = 0;
+					int spacecounter = 0;
+					if (!ret) {
+						System.out.println("i was here");
+						for (i = 0; i < spielfeld.length; i++) {
+							for (j = 0; j < spielfeld.length; j++) {
+								feld = getSpielfeld(i, j);
+								if (feld >= 0) {
+									spacecounter++;
+								}
+								if (feld == otherplayer) {
+									counter++;
+								}
+							}
+							System.out.println(getFeldgroesse()/2);
+							System.out.println("c"+counter);
+							System.out.println("feldgr"+getFeldgroesse());
+							System.out.println("sum"+(counter+spacecounter));
+							System.out.println("b1: "+(counter > (getFeldgroesse()/2)));
+							System.out.println("b2: "+(counter + spacecounter == getFeldgroesse()));
+							if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
+								System.out.println("true");
+								ret = true;
+								break;
+							}
+							counter = 0;
+							spacecounter = 0;
+						}
+						for (i = 0; i < spielfeld.length; i++) {
+							for (j = 0; j < spielfeld.length; j++) {
+								feld = getSpielfeld(j, i);
+								if (feld >= 0) {
+									spacecounter++;
+								}
+								if (feld == otherplayer) {
+									counter++;
+								}
+							}
+							if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
+								System.out.println("true");
+								ret = true;
+								break;
+							}
+							counter = 0;
+							spacecounter = 0;
+						}
+						i = 0;
+						j = 0;
+						while (i < getFeldgroesse()) {
+							feld = getSpielfeld(i, j);
+							if (feld >= 0) {
+								spacecounter++;
+							}
+							if (feld == otherplayer) {
+								counter++;
+							}
+							i++;
+							j++;
+						}
+						if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
+							ret = true;
+						}
+						counter = 0;
+						spacecounter = 0;
+					
+						i = 0;
+						j = getFeldgroesse()-1;
+						while (i < getFeldgroesse()) {
+							feld = getSpielfeld(i, j);
+							if (feld >= 0) {
+								spacecounter++;
+							}
+							if (feld == otherplayer) {
+								counter++;
+							}
+							i++;
+							j++;
+						}
+						if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
+							ret = true;
+						}
+						if (!ret) {
+							
+							if (!ret) {
+								
+								if (!ret) {
+									
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return ret;
+	}
+	 * 
+	 * 
+	 * 
+	 * 
 	 */
 
 	

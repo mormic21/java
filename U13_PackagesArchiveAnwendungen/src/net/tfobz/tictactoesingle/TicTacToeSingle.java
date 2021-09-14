@@ -19,7 +19,7 @@ public class TicTacToeSingle {
 					try {
 						ret = ttt.setZugSpieler1(new java.util.Scanner(System.in).nextInt());
 					} catch (Exception e) {
-						System.out.println("Bitte geben Sie eine Zahl ein!");
+						System.out.println("Bitte geben Sie eine gültige Zahl ein!");
 						continue;
 					}
 					
@@ -48,7 +48,7 @@ public class TicTacToeSingle {
 					try {
 						ret = ttt.setZugSpieler2(new java.util.Scanner(System.in).nextInt());
 					} catch (Exception e) {
-						System.out.println("Bitte geben Sie eine Zahl ein!");
+						System.out.println("Bitte geben Sie eine gültige Zahl ein!");
 						continue;
 					}
 					switch(ret) {
