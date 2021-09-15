@@ -1,5 +1,10 @@
 package net.tfobz.tictactoe;
 
+/**
+ * Klasse mit Methoden zur Realisierung des Spiels "Tic Tac Toe"
+ * @author Michael Morandell
+ *
+ */
 public class TicTacToe {
 	// Das Spielfeld
 	private int[][] spielfeld;
@@ -23,8 +28,10 @@ public class TicTacToe {
 		if (feldgroesse < 3) {
 			feldgroesse = 3;
 		}
+		//spielfeld wird initialisert
 		spielfeld = new int[feldgroesse][feldgroesse];
 		int number = 0;
+		//nummern werden eingetragen
 		for (int i = 0; i < spielfeld.length; i++) {
 			for (int j = 0; j < spielfeld.length; j++) {
 				spielfeld[i][j] = number;
@@ -51,16 +58,20 @@ public class TicTacToe {
 		String ret = "";
 		int number;
 		int space;
+		//größte auszugebende Zahl wird berechnet
 		int biggestnum = (int)(Math.pow((double)getFeldgroesse(),(double) 2))-1;
+		//berechnung der nötigen Leerzeichen
 		int allspaces = String.valueOf(biggestnum).length();
 		if (allspaces != 1) {
 			allspaces++;
 		}
+		//Umwandlung in einen String mit erforderlichen Leerzeichen
 		for (int i = 0; i < getFeldgroesse(); i++) {
 			for (int j = 0; j < getFeldgroesse(); j++) {
 				number = spielfeld[i][j];
 				if (number >= 0) {
 					space = allspaces - String.valueOf(number).length();
+					//leerzeichen einfuegen
 					for (int n = 0; n < space; n++) {
 						ret = ret + " ";
 					}
@@ -68,6 +79,7 @@ public class TicTacToe {
 				} else {
 					if (number == SPIELER1) {
 						space = allspaces - 1;
+						//leerzeichen einfuegen
 						for (int n = 0; n < space; n++) {
 							ret = ret + " ";
 						}
@@ -75,6 +87,7 @@ public class TicTacToe {
 					}
 					if (number == SPIELER2) {
 						space = allspaces - 1;
+						//leerzeichen einfuegen
 						for (int n = 0; n < space; n++) {
 							ret = ret + " ";
 						}
@@ -84,7 +97,9 @@ public class TicTacToe {
 			}
 			ret = ret + "\n";
 		}
+		//das letzte \n wird entfernt
 		ret = ret.substring(0, ret.length()-1);
+		//return
 		return ret;
 	}
 	
@@ -108,24 +123,29 @@ public class TicTacToe {
 	 */
 	public int getSpielfeld(int zeile, int spalte) {
 		int ret = 0;
+		//ausserhalb des Spielfeldes
 		if (zeile >= getFeldgroesse()) {
 			ret = -3;
 		}
 		else {
+			//ausserhalb des Spielfeldes
 			if (spalte >= getFeldgroesse()) {
 				ret = -3;
 			}
 			else {
+				//Spieler1
 				if (spielfeld[zeile][spalte] == SPIELER1) {
 					ret = SPIELER1;
 				}
 				else {
+					//Spieler2
 					if (spielfeld[zeile][spalte] == SPIELER2) {
 						ret = SPIELER2;
 					} 
 				}
 			}
 		}
+		//return
 		return ret;
 	}
 	
@@ -142,29 +162,36 @@ public class TicTacToe {
 		int ret = 0;
 		int zeile = 0;
 		int spalte = zug;
+		//Berechnung der Koordinaten der Zugnummer
 		while (spalte >= getFeldgroesse()) {
 			spalte = spalte - getFeldgroesse();
 			zeile++;
 		}
 		int spielret = getSpielfeld(zeile, spalte);
 		switch(spielret) {
+			//Wenn Zug ausserhalb des Spielfeldes
 			case -3: {
 				ret = -1;
 				break;
 			}
+			//Wenn Zug von Spieler1 belegt
 			case SPIELER1: {
 				ret = -2;
 				break;
 			}
+			//Wenn Zug von Spieler2 belegt
 			case SPIELER2: {
 				ret = -2;
 				break;
 			}
+			//Wenn Zug frei
 			case 0: {
+				//zug wird gesetzt
 				spielfeld[zeile][spalte] = spielernummer;
 				break;
 			}
 		}
+		//return
 		return ret;
 	}
 	
@@ -203,10 +230,11 @@ public class TicTacToe {
 		int feld;
 		int counter = 0;
 		int counter2 = 0;
-		
+		//Geht für player alle Gewinnkombinationen durch
 		int player = SPIELER1;
 		int n = 0;
 		while (n < 2) {
+			//Geht alle waagrechte Linien durch
 			for (int i = 0; i < spielfeld.length; i++) {
 				for (int j = 0; j < spielfeld.length; j++) {
 					feld = getSpielfeld(i, j);
@@ -222,6 +250,7 @@ public class TicTacToe {
 			if (counter2 == getFeldgroesse()) {
 				ret =  player;
 			}
+			//Geht alle senkrechten Linien durch
 			counter2 = 0;
 			if (ret == 0) {
 				for (int i = 0; i < spielfeld.length; i++) {
@@ -239,6 +268,7 @@ public class TicTacToe {
 				if (counter2 == getFeldgroesse()) {
 					ret = player;
 				}
+				//geht die 1. Diagonale durch
 				counter2 = 0;
 				if (ret == 0) {
 					int i = 0;
@@ -254,6 +284,7 @@ public class TicTacToe {
 					if (counter == getFeldgroesse()) {
 						ret = player;
 					}
+					//geht die 2. Diagonale durch
 					counter = 0;
 					if (ret == 0) {
 						i = 0;
@@ -273,14 +304,17 @@ public class TicTacToe {
 					}
 				}
 			}
+			//player wird gewechselt
 			if (ret == 0) {
 				player = SPIELER2;
 				n++;
 			}
 			else {
+				//schleifenabbruch
 				n = 2;
 			}
 		}
+		//return
 		return ret;
 	}
 	
@@ -290,23 +324,7 @@ public class TicTacToe {
 	 */
 	public boolean getEinerKannGewinnen() {
 		
-		/**
-		 * NEW
-		 * aktul_player bestimmen:
-		 * 	wiviele felder von player1
-		 * 	wieviele felder von player2
-		 * 	wenn player1 = player2
-		 * 		dann akt_player = player1
-		 * 	sonst
-		 * 		player2
-		 * 
-		 * prozedere nur durführen für akt_player
-		 * zB: if(spielfeld == otherplayer) {
-		 * 			counter++;
-		 * 2 4 0 1 7 5 8 6 ok
-		 * 2 4 0 1 7 5 3 ???
-		 * 1 0 2 4 3 5 8 ende
-		 */
+		//Intialisierung
 		int felder_player1 = 0;
 		int felder_player2 = 0;
 		int currentplayer;
@@ -314,7 +332,7 @@ public class TicTacToe {
 		boolean ret = false;
 		int counter = 0;
 		int feld;
-		
+		//der aktuelle Spieler wird bestimmt
 		for (int i = 0; i < spielfeld.length; i++) {
 			for (int j = 0; j < spielfeld.length; j++) {
 				feld = getSpielfeld(i, j);
@@ -334,9 +352,7 @@ public class TicTacToe {
 			currentplayer = SPIELER2; 
 			otherplayer = SPIELER1;
 		}
-		System.out.println("akuell " + currentplayer);
-		System.out.println("other " + otherplayer);
-		//
+		//Überprüfung ob noch freie Waagrechten für aktuellenSpieler verfügbar sind
 		for (int i = 0; i < spielfeld.length; i++) {
 			for (int j = 0; j < spielfeld.length; j++) {
 				feld = getSpielfeld(i, j);
@@ -351,6 +367,7 @@ public class TicTacToe {
 			counter = 0;
 		}
 		if (!ret) {
+			//Überprüfung ob noch freie Senkrechten für aktuellenSpieler verfügbar sind
 			for (int i = 0; i < spielfeld.length; i++) {
 				for (int j = 0; j < spielfeld.length; j++) {
 					feld = getSpielfeld(j, i);
@@ -365,6 +382,7 @@ public class TicTacToe {
 				counter = 0; 
 			}
 			if (!ret) {
+				//Überprüfung ob die 1. Diagonale noch gewinnbar ist
 				int i = 0;
 				int j = 0;
 				while (i < getFeldgroesse()) {
@@ -380,6 +398,7 @@ public class TicTacToe {
 				}
 				counter = 0;
 				if (!ret) {
+					//Überprüfung ob die 2. Diagonale noch gewinnbar ist
 					i = 0;
 					j = getFeldgroesse()-1;
 					while (i < getFeldgroesse()) {
@@ -396,7 +415,7 @@ public class TicTacToe {
 					counter = 0;
 					int spacecounter = 0;
 					if (!ret) {
-						System.out.println("i was here");
+						//Überprüfung der Gewinnchancen des aktuellenSpielers in den Waagrechten
 						for (i = 0; i < spielfeld.length; i++) {
 							for (j = 0; j < spielfeld.length; j++) {
 								feld = getSpielfeld(i, j);
@@ -407,20 +426,14 @@ public class TicTacToe {
 									counter++;
 								}
 							}
-							System.out.println(getFeldgroesse()/2);
-							System.out.println("c"+counter);
-							System.out.println("feldgr"+getFeldgroesse());
-							System.out.println("sum"+(counter+spacecounter));
-							System.out.println("b1: "+(counter > (getFeldgroesse()/2)));
-							System.out.println("b2: "+(counter + spacecounter == getFeldgroesse()));
 							if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
-								System.out.println("true");
 								ret = true;
 								break;
 							}
 							counter = 0;
 							spacecounter = 0;
 						}
+						//Überprüfung der Gewinnchancen des aktuellenSpielers in den Senkrechten
 						for (i = 0; i < spielfeld.length; i++) {
 							for (j = 0; j < spielfeld.length; j++) {
 								feld = getSpielfeld(j, i);
@@ -432,13 +445,13 @@ public class TicTacToe {
 								}
 							}
 							if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
-								System.out.println("true");
 								ret = true;
 								break;
 							}
 							counter = 0;
 							spacecounter = 0;
 						}
+						//Überprüfung der Gewinnchancen des aktuellenSpielers in der 1. Diagonale
 						i = 0;
 						j = 0;
 						while (i < getFeldgroesse()) {
@@ -457,7 +470,7 @@ public class TicTacToe {
 						}
 						counter = 0;
 						spacecounter = 0;
-					
+						//Überprüfung der Gewinnchancen des aktuellenSpielers in der 2. Diagonale
 						i = 0;
 						j = getFeldgroesse()-1;
 						while (i < getFeldgroesse()) {
@@ -474,393 +487,11 @@ public class TicTacToe {
 						if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
 							ret = true;
 						}
-						if (!ret) {
-							
-							if (!ret) {
-								
-								if (!ret) {
-									
-								}
-							}
-						}
 					}
 				}
 			}
 		}
+		//return
 		return ret;
 	}
-
-
-	/**
-	 * boolean ret = false;
-		int player = SPIELER1;
-		int counter = 0;
-		int n = 0;
-		int feld;
-		
-		while (n < 2) {
-			for (int i = 0; i < spielfeld.length; i++) {
-				for (int j = 0; j < spielfeld.length; j++) {
-					feld = getSpielfeld(i, j);
-					if (feld == player) {
-						counter++;
-					}
-				}
-				if (counter == 0) {
-					ret = true;
-					break;
-				}
-				counter = 0;
-			}
-			if (!ret) {
-				for (int i = 0; i < spielfeld.length; i++) {
-					for (int j = 0; j < spielfeld.length; j++) {
-						feld = getSpielfeld(j, i);
-						if (feld == player) {
-							counter++;
-						}
-					}
-					if (counter == 0) {
-						ret = true;
-						break;
-					}
-					counter = 0; 
-				}
-				if (!ret) {
-					int i = 0;
-					int j = 0;
-					while (i < getFeldgroesse()) {
-						feld = getSpielfeld(i, j);
-						if (feld == player) {
-							counter++;
-						}
-						i++;
-						j++;
-					}
-					if (counter == 0) {
-						ret = true;
-					}
-					counter = 0;
-					if (!ret) {
-						i = 0;
-						j = getFeldgroesse()-1;
-						while (i < getFeldgroesse()) {
-							feld = getSpielfeld(i, j);
-							if (feld == player) {
-								counter++;
-							}
-							i++;
-							j--;
-						}
-						if (counter == 0) {
-							ret = true;
-						}
-						counter = 0;
-					}
-				}
-			}
-			if (!ret) {
-				player = SPIELER2;
-				n++;
-			}
-			else {
-				n = 2;
-			}
-	 */
-	
-	/**
-	 * 
-	 * 
-	 * VERSION 2.0 
-	 * 
-	 * 
-	 * int felder_player1 = 0;
-		int felder_player2 = 0;
-		int currentplayer = 0;
-		int otherplayer = 0;
-		boolean ret = false;
-		int counter = 0;
-		int feld;
-		
-		for (int i = 0; i < spielfeld.length; i++) {
-			for (int j = 0; j < spielfeld.length; j++) {
-				feld = getSpielfeld(i, j);
-				if (feld == SPIELER1) {
-					felder_player1++;
-				}
-				if (feld == SPIELER2) {
-					felder_player2++;
-				}
-			}
-		}
-		
-		if (felder_player1 == felder_player2) {
-			currentplayer = SPIELER1;
-			otherplayer = SPIELER2;
-		}
-		else {
-			currentplayer = SPIELER2; 
-			otherplayer = SPIELER1;
-		}
-		
-		for (int i = 0; i < spielfeld.length; i++) {
-			for (int j = 0; j < spielfeld.length; j++) {
-				feld = getSpielfeld(i, j);
-				if (feld == otherplayer) {
-					counter++;
-				}
-			}
-			if (counter == 0) {
-				ret = true;
-			}
-			counter = 0;
-		}
-		if (!ret) {
-			for (int i = 0; i < spielfeld.length; i++) {
-				for (int j = 0; j < spielfeld.length; j++) {
-					feld = getSpielfeld(j, i);
-					if (feld == otherplayer) {
-						counter++;
-					}
-				}
-				if (counter == 0) {
-					ret = true;
-				}
-				counter = 0; 
-			}
-			if (!ret) {
-				int i = 0;
-				int j = 0;
-				while (i < getFeldgroesse()) {
-					feld = getSpielfeld(i, j);
-					if (feld == otherplayer) {
-						counter++;
-					}
-					i++;
-					j++;
-				}
-				if (counter == 0) {
-					ret = true;
-				}
-				counter = 0;
-				if (!ret) {
-					i = 0;
-					j = getFeldgroesse()-1;
-					while (i < getFeldgroesse()) {
-						feld = getSpielfeld(i, j);
-						if (feld == otherplayer) {
-							counter++;
-						}
-						i++;
-						j--;
-					}
-					if (counter == 0) {
-						ret = true;
-					}
-					counter = 0;
-				}
-			}
-		}
-		return ret;
-	 */
-	/**
-	 * 
-	 * VERSION 3.0
-	 * 
-	 * 
-	 * 2 4 0 1 7 5 8 6  ERROR
-	* 2 4 0 1 7 5 3 OK
-	* 1 0 2 4 3 5 8 OK
-	*
-		int felder_player1 = 0;
-		int felder_player2 = 0;
-		int currentplayer;
-		int otherplayer;
-		boolean ret = false;
-		int counter = 0;
-		int feld;
-		
-		for (int i = 0; i < spielfeld.length; i++) {
-			for (int j = 0; j < spielfeld.length; j++) {
-				feld = getSpielfeld(i, j);
-				if (feld == SPIELER1) {
-					felder_player1++;
-				}
-				if (feld == SPIELER2) {
-					felder_player2++;
-				}
-			}
-		}
-		
-		if (felder_player1 == felder_player2) {
-			currentplayer = SPIELER1;
-			otherplayer = SPIELER2;
-		}
-		else {
-			currentplayer = SPIELER2; 
-			otherplayer = SPIELER1;
-		}
-		System.out.println("akuell " + currentplayer);
-		System.out.println("other " + otherplayer);
-		//
-		for (int i = 0; i < spielfeld.length; i++) {
-			for (int j = 0; j < spielfeld.length; j++) {
-				feld = getSpielfeld(i, j);
-				if (feld == otherplayer) {
-					counter++;
-				}
-			}
-			if (counter == 0) {
-				ret = true;
-				break;
-			}
-			counter = 0;
-		}
-		if (!ret) {
-			for (int i = 0; i < spielfeld.length; i++) {
-				for (int j = 0; j < spielfeld.length; j++) {
-					feld = getSpielfeld(j, i);
-					if (feld == otherplayer) {
-						counter++;
-					}
-				}
-				if (counter == 0) {
-					ret = true;
-					break;
-				}
-				counter = 0; 
-			}
-			if (!ret) {
-				int i = 0;
-				int j = 0;
-				while (i < getFeldgroesse()) {
-					feld = getSpielfeld(i, j);
-					if (feld == otherplayer) {
-						counter++;
-					}
-					i++;
-					j++;
-				}
-				if (counter == 0) {
-					ret = true;
-				}
-				counter = 0;
-				if (!ret) {
-					i = 0;
-					j = getFeldgroesse()-1;
-					while (i < getFeldgroesse()) {
-						feld = getSpielfeld(i, j);
-						if (feld == otherplayer) {
-							counter++;
-						}
-						i++;
-						j--;
-					}
-					if (counter == 0) {
-						ret = true;
-					}
-					counter = 0;
-					int spacecounter = 0;
-					if (!ret) {
-						System.out.println("i was here");
-						for (i = 0; i < spielfeld.length; i++) {
-							for (j = 0; j < spielfeld.length; j++) {
-								feld = getSpielfeld(i, j);
-								if (feld >= 0) {
-									spacecounter++;
-								}
-								if (feld == otherplayer) {
-									counter++;
-								}
-							}
-							System.out.println(getFeldgroesse()/2);
-							System.out.println("c"+counter);
-							System.out.println("feldgr"+getFeldgroesse());
-							System.out.println("sum"+(counter+spacecounter));
-							System.out.println("b1: "+(counter > (getFeldgroesse()/2)));
-							System.out.println("b2: "+(counter + spacecounter == getFeldgroesse()));
-							if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
-								System.out.println("true");
-								ret = true;
-								break;
-							}
-							counter = 0;
-							spacecounter = 0;
-						}
-						for (i = 0; i < spielfeld.length; i++) {
-							for (j = 0; j < spielfeld.length; j++) {
-								feld = getSpielfeld(j, i);
-								if (feld >= 0) {
-									spacecounter++;
-								}
-								if (feld == otherplayer) {
-									counter++;
-								}
-							}
-							if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
-								System.out.println("true");
-								ret = true;
-								break;
-							}
-							counter = 0;
-							spacecounter = 0;
-						}
-						i = 0;
-						j = 0;
-						while (i < getFeldgroesse()) {
-							feld = getSpielfeld(i, j);
-							if (feld >= 0) {
-								spacecounter++;
-							}
-							if (feld == otherplayer) {
-								counter++;
-							}
-							i++;
-							j++;
-						}
-						if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
-							ret = true;
-						}
-						counter = 0;
-						spacecounter = 0;
-					
-						i = 0;
-						j = getFeldgroesse()-1;
-						while (i < getFeldgroesse()) {
-							feld = getSpielfeld(i, j);
-							if (feld >= 0) {
-								spacecounter++;
-							}
-							if (feld == otherplayer) {
-								counter++;
-							}
-							i++;
-							j++;
-						}
-						if (counter > (getFeldgroesse()/2) && counter + spacecounter == getFeldgroesse()) {
-							ret = true;
-						}
-						if (!ret) {
-							
-							if (!ret) {
-								
-								if (!ret) {
-									
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		return ret;
-	}
-	 * 
-	 * 
-	 * 
-	 * 
-	 */
-
-	
-
 }
