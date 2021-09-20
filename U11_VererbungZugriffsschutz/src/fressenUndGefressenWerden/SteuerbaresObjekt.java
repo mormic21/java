@@ -102,13 +102,15 @@ public class SteuerbaresObjekt extends BeweglichesGutesObjekt{
 			}
 			//beweglichesGutesObjekt
 			else if (this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
-					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))) instanceof BeweglichesGutesObjekt){
+					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))) instanceof BeweglichesGutesObjekt
+					&& !(this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
+							(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))) instanceof BeweglichesBoesesObjekt)){
 				BeweglichesGutesObjekt b = (BeweglichesGutesObjekt) (this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
 						(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))));
 				b.stirb();
 				punkte++;
 			}
-			//beweglichesSchlchtesObjekt
+			//BeweglichesSchlechtesObjekt
 			else if(this.getObjektBei((this.getX() + this.getxRichtung() / (10 * geschwindigkeit)),
 					(this.getY() + this.getyRichtung() / (10 * geschwindigkeit))) instanceof BeweglichesBoesesObjekt){
 				this.stirb();

@@ -62,7 +62,7 @@ public class UnbeweglichesObjekt extends JComponent
 	
 	/**
 	 * Objekt stirbt, indem es sich selbständig vom contentPane des Formulars entfernt.
-	 * Dabdurch wird das Objekt auch nicht mehr angezeigt
+	 * Dadurch wird das Objekt auch nicht mehr angezeigt
 	 */
 	public void stirb() {
 		if (!this.gestorben && this.getParent() != null) {
