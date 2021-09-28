@@ -11,7 +11,7 @@ public class TicTacToeClient extends TicTacToe{
 	//Die IP-Adresse an welcher der TicTacToeServer läuft
 	private static String ipAdresse;
 	//Port auf welchem der Server läuft
-	private static final int PORT = 65535;
+	private static final int PORT = 65000;
 	/**
 	 * Variable über welche der TicTacToeClient verwaltet wird. 
 	 * Das Objekt wird durch die Methode setMeinZug erstellt, in der Methode getGegnerZug weiter 
@@ -19,6 +19,10 @@ public class TicTacToeClient extends TicTacToe{
 	 */
 	private Socket client;
 	
+	/**
+	 * Parameterbehafteter Konstruktor, der das Spielfeld anlegt
+	 * @param feldgroesse - des Spielfeldes
+	 */
 	public TicTacToeClient(int feldgroesse) {
 		super(feldgroesse);
 	}
@@ -32,63 +36,62 @@ public class TicTacToeClient extends TicTacToe{
 			System.out.println("Bitte als ersten Parameter die IP-Adresse des Servers übergeben!");
 			System.exit(1);
 		}
+		
 		TicTacToeClient tClient = null;
-		try {
-			tClient = new TicTacToeClient(FELDGROESSE);
-			System.out.println("T i c T a c T o e - C l i e n t");
-			System.out.println("===============================");
-			while (tClient.getEinerKannGewinnen() && tClient.getGewonnen() == 0) {
-				boolean loop = true;
-				System.out.println(tClient.toString());
-				try {
-					int zug = -1;
-					while (loop) {
-						try {
-							zug = tClient.readInt("Ihr Zug: ");
-						} catch (Exception e) {
-							System.out.println("Bitte geben Sie eine gültige Zahl ein!");
-							continue;
-						}
-						int ret = tClient.setMeinZug(zug);
-						//Rückgabe der SetZugMethode wird analysiert
-						switch(ret) {
-							case 0: {
-								loop = false;
-								break;
-							}
-							case -1: {
-								System.out.println("Der angegebene Zug liegt auserhalb des Spielfeldes!");
-								break;
-							}
-							case -2: {
-								System.out.println("Der angegebene Zug wurde bereits gesetzt!");
-								break;
-							}
-						}
-					}
-					if (tClient.getGewonnen() != 0 || !tClient.getEinerKannGewinnen()) {
-						break;
-					}
-					System.out.println(tClient.toString());
-					System.out.println("Warten auf den Zug des Gegners...");
-					tClient.getGegnerZug();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} finally {
+		tClient = new TicTacToeClient(FELDGROESSE);
+		tClient.ipAdresse = "192.168.176.25";
+		System.out.println("T i c T a c T o e - C l i e n t");
+		System.out.println("===============================");
+		while (tClient.getEinerKannGewinnen() && tClient.getGewonnen() == 0) {
+			boolean loop = true;
+			System.out.println(tClient.toString());
+			try {
+				int zug = -1;
+				while (loop) {
 					try {
-						tClient.close();
-					} catch (IOException e) {
-						e.printStackTrace();
+						zug = tClient.readInt("Ihr Zug: ");
+					} catch (Exception e) {
+						System.out.println("Bitte geben Sie eine gültige Zahl ein!");
+						continue;
+					}
+					int ret = tClient.setMeinZug(zug);
+					//Rückgabe der SetZugMethode wird analysiert
+					switch(ret) {
+						case 0: {
+							loop = false;
+							break;
+						}
+						case -1: {
+							System.out.println("Der angegebene Zug liegt auserhalb des Spielfeldes!");
+							break;
+						}
+						case -2: {
+							System.out.println("Der angegebene Zug wurde bereits gesetzt!");
+							break;
+						}
+						case -3: {
+							System.out.println("Clientsocket exsistiert bereits");
+							break;
+						}
 					}
 				}
-				
+				if (tClient.getGewonnen() != 0 || !tClient.getEinerKannGewinnen()) {
+					break;
+				}
+				System.out.println(tClient.toString());
+				System.out.println("Warten auf den Zug des Gegners...");
+				if (tClient.getGegnerZug() == -3) {
+					System.out.println("Kein ClientSocket vorhanden!");
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 			//Spieler1 hat gewonnen
-			if (tClient.getGewonnen() == tClient.SPIELER1) {
+			if (tClient.getGewonnen() == tClient.SPIELER2) {
 				System.out.println("Der Gegner hat gewonnen!");
 			} else {
 				//Spieler2 hat gewonnen
-				if (tClient.getGewonnen() == tClient.SPIELER2) {
+				if (tClient.getGewonnen() == tClient.SPIELER1) {
 					System.out.println("Sie haben gewonnen!");
 				} else {
 					//Unentschieden
@@ -96,14 +99,6 @@ public class TicTacToeClient extends TicTacToe{
 						System.out.println("Unentschieden!");
 					}
 				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				tClient.close();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 	}
@@ -124,14 +119,14 @@ public class TicTacToeClient extends TicTacToe{
 	 */
 	public int setMeinZug(int zug) throws java.io.IOException, java.net.UnknownHostException {
 		int ret = this.setZugSpieler1(zug);
-		if (zug == 0) {
-			if (this.client == null) {
+		if (ret == 0) {
+			if (this.client == null || this.client.isClosed()) {
 				this.client = new Socket(ipAdresse, PORT);
 				OutputStream out = this.client.getOutputStream();
 				out.write(zug);
 			}
 			else {
-				ret = 3;
+				ret = -3;
 			}
 		}
 		return ret;
@@ -151,12 +146,12 @@ public class TicTacToeClient extends TicTacToe{
 	 */
 	public int getGegnerZug() throws java.io.IOException {
 		int ret = -3;
-		if (this.client != null) {
+		if (this.client != null && !this.client.isClosed()) {
 			InputStream in = this.client.getInputStream();
 			int zug = (byte)in.read();
 			ret = this.setZugSpieler2(zug);
 			if (ret == 0) {
-				this.client.close();
+				this.close();
 			}
 		}
 		return ret;
@@ -177,44 +172,6 @@ public class TicTacToeClient extends TicTacToe{
 	 * @throws java.io.IOException
 	 */
 	public void close() throws java.io.IOException {
-		client.close();
+		this.client.close();
 	}
-
-
-
-	
-	
-	
-	
-	
-//	private static final String HOST = "localhost";
-//	private static final int PORT = 65535;
-//
-//	public static void main(String[] args) {
-//		Socket client = null;
-//		try {
-//			client = new Socket(HOST, PORT);
-//			InputStream in = client.getInputStream();
-//			OutputStream out = client.getOutputStream();
-//			out.write(4);
-//			out.write(9);
-//			int ergebnis = (byte) in.read();
-//			System.out.println(ergebnis);
-//		} catch (UnknownHostException e) {
-//			behandleException(e);
-//		} catch (IOException e) {
-//			behandleException(e);
-//		} finally {
-//			try {
-//				client.close();
-//			} catch (Exception e) {
-//				;
-//			}
-//		}
-//	}
-//
-//	private static void behandleException(Exception e) {
-//		System.out.println("Exception Objekt: " + e.getClass().getName());
-//		System.out.println("Fehlermeldung: " + e.getMessage());
-//	}
 }

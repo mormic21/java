@@ -7,7 +7,7 @@ public class TicTacToeServer extends TicTacToe{
 	//Die vorgegebene Feldgröße des Spielfeldes
 	private static final int FELDGROESSE = 3;
 	//Port auf welchem der Server läuft
-	private static final int PORT = 65535;
+	private static final int PORT = 65000;
 	//Über dieses Objekt werden alle Clientabfragen abgearbeitet. Dieses Objekt stellt den ServerSocket dar
 	private ServerSocket server;
 	/**
@@ -24,7 +24,7 @@ public class TicTacToeServer extends TicTacToe{
 	 */
 	public TicTacToeServer(int feldgroesse, int port) throws IOException {
 		super(feldgroesse);
-		server = new ServerSocket(PORT);
+		this.server = new ServerSocket(port);
 	}
 	
 	/**
@@ -43,10 +43,12 @@ public class TicTacToeServer extends TicTacToe{
 			while (tServer.getEinerKannGewinnen() && tServer.getGewonnen() == 0) {
 				boolean loop = true;
 				System.out.println(tServer.toString());
-				System.out.println("Warten auf den Zug des Gegners");
+				System.out.println("Warten auf den Zug des Gegners ...");
 				try {
+					if (tServer.getGegnerZug() == -3) {
+						System.out.println("Kein ClientSocket vorhanden!");
+					}
 					System.out.println(tServer.toString());
-					tServer.getGegnerZug();
 					//Überprüfung auf Unentschieden oder Sieg
 					if (tServer.getGewonnen() != 0 || !tServer.getEinerKannGewinnen()) {
 						break;
@@ -74,19 +76,16 @@ public class TicTacToeServer extends TicTacToe{
 								System.out.println("Der angegebene Zug wurde bereits gesetzt!");
 								break;
 							}
+							case -3: {
+								System.out.println("Clientsocket nicht vorhanden");
+								break;
+							}
 						}
 						
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
-				} finally {
-					try {
-						tServer.clientSocket.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
 				}
-				
 			}
 			//Spieler1 hat gewonnen
 			if (tServer.getGewonnen() == tServer.SPIELER1) {
@@ -145,7 +144,7 @@ public class TicTacToeServer extends TicTacToe{
 	 */
 	public int getGegnerZug() throws java.io.IOException {
 		int ret = -3;
-		if (this.clientSocket == null) {
+		if (this.clientSocket == null || this.clientSocket.isClosed()) {
 			this.clientSocket = this.server.accept();
 			InputStream in = this.clientSocket.getInputStream();
 			int zug = (byte)in.read();
@@ -168,7 +167,7 @@ public class TicTacToeServer extends TicTacToe{
 	 */
 	public int setMeinZug(int zug) throws java.io.IOException {
 		int ret = -3;
-		if (this.clientSocket != null) {
+		if (this.clientSocket.isConnected()) {
 			OutputStream out = this.clientSocket.getOutputStream();
 			ret = this.setZugSpieler2(zug);
 			if (ret == 0) {
