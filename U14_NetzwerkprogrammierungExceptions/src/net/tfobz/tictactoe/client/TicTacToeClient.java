@@ -39,7 +39,7 @@ public class TicTacToeClient extends TicTacToe{
 		
 		TicTacToeClient tClient = null;
 		tClient = new TicTacToeClient(FELDGROESSE);
-		tClient.ipAdresse = "192.168.176.25";
+		tClient.ipAdresse = args[0];
 		System.out.println("T i c T a c T o e - C l i e n t");
 		System.out.println("===============================");
 		while (tClient.getEinerKannGewinnen() && tClient.getGewonnen() == 0) {
@@ -86,18 +86,18 @@ public class TicTacToeClient extends TicTacToe{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			//Spieler1 hat gewonnen
-			if (tClient.getGewonnen() == tClient.SPIELER2) {
-				System.out.println("Der Gegner hat gewonnen!");
+		}
+		//Spieler1 hat gewonnen
+		if (tClient.getGewonnen() == tClient.SPIELER2) {
+			System.out.println("Der Gegner hat gewonnen!");
+		} else {
+			//Spieler2 hat gewonnen
+			if (tClient.getGewonnen() == tClient.SPIELER1) {
+				System.out.println("Sie haben gewonnen!");
 			} else {
-				//Spieler2 hat gewonnen
-				if (tClient.getGewonnen() == tClient.SPIELER1) {
-					System.out.println("Sie haben gewonnen!");
-				} else {
-					//Unentschieden
-					if (!tClient.getEinerKannGewinnen()) {
-						System.out.println("Unentschieden!");
-					}
+				//Unentschieden
+				if (!tClient.getEinerKannGewinnen()) {
+					System.out.println("Unentschieden!");
 				}
 			}
 		}
