@@ -1,4 +1,4 @@
-package net.tfobz.tictactoe.server;
+package net.tfobz.tictactoe.gui;
 import net.tfobz.tictactoe.*;
 import java.net.*;
 import java.io.*;
@@ -35,50 +35,45 @@ public class TicTacToeServer extends TicTacToe{
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		TicTacToeServer tServer = null;
+		TicTacToeServer tictactoeServer = null;
+		TicTacToeJFrame tictactoeFenster = null;
 		try {
-			tServer = new TicTacToeServer(FELDGROESSE, PORT);
-			System.out.println("T i c T a c T o e - S e r v e r");
-			System.out.println("===============================");
-			while (tServer.getEinerKannGewinnen() && tServer.getGewonnen() == 0) {
+			tictactoeServer = new TicTacToeServer(FELDGROESSE, PORT);
+			tictactoeFenster = new TicTacToeJFrame("TicTacToeServer", tictactoeServer);
+			while (tictactoeServer.getEinerKannGewinnen() && tictactoeServer.getGewonnen() == 0) {
 				boolean loop = true;
-				System.out.println(tServer.toString());
-				System.out.println("Warten auf den Zug des Gegners ...");
+				tictactoeFenster.setStatusleistentext("Warten auf den Zug des Gegners");
 				try {
-					if (tServer.getGegnerZug() == -3) {
-						System.out.println("ClientSocket exsistiert bereits");
+					if (tictactoeServer.getGegnerZug() == -3) {
+						tictactoeFenster.setStatusleistentext("ClientSocket exsistiert bereits");
+						System.out.println("Clientsockte exsistiert bereits");
+						System.exit(-1);
 					}
-					System.out.println(tServer.toString());
+					tictactoeFenster.repaint();
 					//Überprüfung auf Unentschieden oder Sieg
-					if (tServer.getGewonnen() != 0 || !tServer.getEinerKannGewinnen()) {
+					if (tictactoeServer.getGewonnen() != 0 || !tictactoeServer.getEinerKannGewinnen()) {
 						break;
 					}
 					int zug = -1;
+					tictactoeFenster.setStatusleistentext("Bitte ihren Zug eingeben!");
 					while (loop) {
-						try {
-							zug = tServer.readInt("Ihr Zug: ");
-						} catch (Exception e) {
-							System.out.println("Bitte geben Sie eine gültige Zahl ein!");
-							continue;
-						}
-						int ret = tServer.setMeinZug(zug);
+						zug = tictactoeFenster.getGewaehlteFeldnummer();
+						int ret = tictactoeServer.setMeinZug(zug);
 						//Rückgabe der SetZugMethode wird analysiert
 						switch(ret) {
 							case 0: {
 								loop = false;
-								break;
-							}
-							case -1: {
-								System.out.println("Der angegebene Zug liegt auserhalb des Spielfeldes!");
+								tictactoeFenster.repaint();
 								break;
 							}
 							case -2: {
-								System.out.println("Der angegebene Zug wurde bereits gesetzt!");
+								tictactoeFenster.setStatusleistentext("Der angegebene Zug wurde bereits gesetzt!");
 								break;
 							}
 							case -3: {
+								tictactoeFenster.setStatusleistentext("Clientsocket nicht vorhanden");
 								System.out.println("Clientsocket nicht vorhanden");
-								break;
+								System.exit(-1);
 							}
 						}
 						
@@ -88,16 +83,16 @@ public class TicTacToeServer extends TicTacToe{
 				}
 			}
 			//Spieler1 hat gewonnen
-			if (tServer.getGewonnen() == tServer.SPIELER1) {
-				System.out.println("Der Gegner hat gewonnen!");
+			if (tictactoeServer.getGewonnen() == tictactoeServer.SPIELER1) {
+				tictactoeFenster.setStatusleistentext("Der Gegner hat gewonnen!");
 			} else {
 				//Spieler2 hat gewonnen
-				if (tServer.getGewonnen() == tServer.SPIELER2) {
-					System.out.println("Sie haben gewonnen!");
+				if (tictactoeServer.getGewonnen() == tictactoeServer.SPIELER2) {
+					tictactoeFenster.setStatusleistentext("Sie haben gewonnen!");
 				} else {
 					//Unentschieden
-					if (!tServer.getEinerKannGewinnen()) {
-						System.out.println("Unentschieden!");
+					if (!tictactoeServer.getEinerKannGewinnen()) {
+						tictactoeFenster.setStatusleistentext("Unentschieden!");
 					}
 				}
 			}
@@ -105,7 +100,7 @@ public class TicTacToeServer extends TicTacToe{
 			e.printStackTrace();
 		} finally {
 			try {
-				tServer.close();
+				tictactoeServer.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
