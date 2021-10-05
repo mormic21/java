@@ -3,8 +3,12 @@ package net.tfobz.tictactoe.client;
 import java.net.*;
 import java.io.*;
 import net.tfobz.tictactoe.*;
-import net.tfobz.tictactoe.server.TicTacToeServer;
 
+/**
+ * TicTacToeClient erbt von TicTacToe und realsiert einen Client zum TicTacToe spielen
+ * @author Michael Morandell
+ *
+ */
 public class TicTacToeClient extends TicTacToe{
 	//Die vorgegebene Feldgröße des Spielfeldes
 	private static final int FELDGROESSE = 3;
@@ -28,35 +32,53 @@ public class TicTacToeClient extends TicTacToe{
 	}
 	
 	/**
+	 * Main
 	 * Im ersten Parameter wird die IP-Adresse des Servers übergeben. Ist dies nicht der Fall, so bricht das Programm ab
 	 * @param args - in args[0] muss die IP-Adresse des TicTacToeServers übergeben werden
 	 */
 	public static void main(String[] args) {
+		//Wenn die IP-Adresse nicht als erstes Argument übergeben wird, wird der Client beendet
 		if(args == null || args.length != 1) {
 			System.out.println("Bitte als ersten Parameter die IP-Adresse des Servers übergeben!");
 			System.exit(1);
 		}
-		
+		//TicTacToeClient-Objekt wird erstellt
 		TicTacToeClient tClient = null;
 		tClient = new TicTacToeClient(FELDGROESSE);
 		tClient.ipAdresse = args[0];
 		System.out.println("T i c T a c T o e - C l i e n t");
 		System.out.println("===============================");
+		//Solange das Spiel noch gewonnen werden kann
 		while (tClient.getEinerKannGewinnen() && tClient.getGewonnen() == 0) {
 			boolean loop = true;
+			//Ausgabe des Spielfeldes
 			System.out.println(tClient.toString());
 			try {
-				int zug = -1;
+				int zug = 0;
 				while (loop) {
 					try {
+						//Zug wird aus dem Terminal eingelesen -> Benutzereingabe
 						zug = tClient.readInt("Ihr Zug: ");
 					} catch (Exception e) {
+						//Wenn keie gültige INT-Zahl eingegeben wurde -> Eingabe wird wiederholt
 						System.out.println("Bitte geben Sie eine gültige Zahl ein!");
 						continue;
 					}
-					int ret = tClient.setMeinZug(zug);
+					int ret = 0;
+					try {
+						//Der Eingegebene Zug wird gesetzt
+						ret = tClient.setMeinZug(zug);
+					} catch (IOException e) {
+						//Wenn IOException geworfen wird, so ist die Verbindung zum Server unterbrochen. Der Client wird beendet
+						System.out.println("Verbindung zum ServerSocket verloren");
+						if (tClient.client != null) {
+							tClient.close();
+						}
+						System.exit(-1);
+					}
 					//Rückgabe der SetZugMethode wird analysiert
 					switch(ret) {
+						//Zug konnte korrekt gesetzt werden
 						case 0: {
 							loop = false;
 							break;
@@ -75,16 +97,27 @@ public class TicTacToeClient extends TicTacToe{
 						}
 					}
 				}
+				//Überprüfung auf Gewinn oder Unentschieden
 				if (tClient.getGewonnen() != 0 || !tClient.getEinerKannGewinnen()) {
 					break;
 				}
+				//Ausgabe des Spielfeldes
 				System.out.println(tClient.toString());
 				System.out.println("Warten auf den Zug des Gegners...");
+				//Zug des Servers wird geholt. Wenn die Rückgabe -3 ist, so ist ein Fehler mit dem ClientSocket passiert
 				if (tClient.getGegnerZug() == -3) {
 					System.out.println("Kein ClientSocket vorhanden!");
 				}
+				//unknownHostException und IOException werden aufgefangen und gehandelt
+			} catch (UnknownHostException e) {
+				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
+				//zum schluss wird der client geschlossen
+			} finally {
+				try {
+					tClient.close();
+				} catch (Exception e) {;}
 			}
 		}
 		//Spieler1 hat gewonnen
@@ -118,14 +151,17 @@ public class TicTacToeClient extends TicTacToe{
 	 * @throws java.net.UnknownHostException, falls beim Erstellen des ClientSockets ein Fehler aufgetreten ist
 	 */
 	public int setMeinZug(int zug) throws java.io.IOException, java.net.UnknownHostException {
+		//Zug wird versucht zu setzten
 		int ret = this.setZugSpieler1(zug);
+		//Wenn das Setzen erfolgreich war
 		if (ret == 0) {
 			if (this.client == null || this.client.isClosed()) {
+				//verbindung zum Server wird aufgenommen
 				this.client = new Socket(ipAdresse, PORT);
 				OutputStream out = this.client.getOutputStream();
+				//Der Zug wird dem Server geschickt
 				out.write(zug);
-			}
-			else {
+			} else {
 				ret = -3;
 			}
 		}
@@ -146,10 +182,14 @@ public class TicTacToeClient extends TicTacToe{
 	 */
 	public int getGegnerZug() throws java.io.IOException {
 		int ret = -3;
+		//Wenn Socket-Verbindung noch offen ist
 		if (this.client != null && !this.client.isClosed()) {
 			InputStream in = this.client.getInputStream();
+			//Server-Zug wird gelesen
 			int zug = (byte)in.read();
+			//Zug wird gesetzt
 			ret = this.setZugSpieler2(zug);
+			//War dies erfolgreich, so wird der Client geschlossen
 			if (ret == 0) {
 				this.close();
 			}

@@ -1,8 +1,0 @@
-package fressenUndGefressenWerden;
-
-public class BeweglichesBoesesObjekt extends BeweglichesGutesObjekt{
-	
-	public BeweglichesBoesesObjekt(java.lang.String dateiname) {
-		super(dateiname);
-	}
-}

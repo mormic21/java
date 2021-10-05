@@ -1,6 +1,4 @@
 package net.tfobz.tictactoe;
-
-
 /**
  * Klasse mit Methoden zur Realisierung des Spiels "Tic Tac Toe"
  * @author Michael Morandell

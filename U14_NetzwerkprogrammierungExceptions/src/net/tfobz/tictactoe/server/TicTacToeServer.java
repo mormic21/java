@@ -3,6 +3,11 @@ import net.tfobz.tictactoe.*;
 import java.net.*;
 import java.io.*;
 
+/**
+ * TicTacToeServer erbt von TicTacToe und realsiert einen Server zum TicTacToe-Spielen
+ * @author Michael Morandell
+ *
+ */
 public class TicTacToeServer extends TicTacToe{
 	//Die vorgegebene Feldgröße des Spielfeldes
 	private static final int FELDGROESSE = 3;
@@ -24,6 +29,7 @@ public class TicTacToeServer extends TicTacToe{
 	 */
 	public TicTacToeServer(int feldgroesse, int port) throws IOException {
 		super(feldgroesse);
+		//ServerSocket wird erstellt
 		this.server = new ServerSocket(port);
 	}
 	
@@ -37,33 +43,61 @@ public class TicTacToeServer extends TicTacToe{
 	public static void main(String[] args) {
 		TicTacToeServer tServer = null;
 		try {
+			//TicTacToeServer Objekt wird erstellt
 			tServer = new TicTacToeServer(FELDGROESSE, PORT);
 			System.out.println("T i c T a c T o e - S e r v e r");
 			System.out.println("===============================");
+			//Solange das Spiel noch von einem Spieler gewonnen werden kann
 			while (tServer.getEinerKannGewinnen() && tServer.getGewonnen() == 0) {
 				boolean loop = true;
 				System.out.println(tServer.toString());
 				System.out.println("Warten auf den Zug des Gegners ...");
 				try {
+					//Gegner-Zug wird geholt. Wenn rueckgabe gleich -3 ist, dann ist ein Fehler mit dem ClientSocket passiert
 					if (tServer.getGegnerZug() == -3) {
 						System.out.println("ClientSocket exsistiert bereits");
+						if (tServer.clientSocket != null) {
+							tServer.close();
+						}
+						else {
+							tServer.server.close();
+						}
+						System.exit(-1);
 					}
+					//Ausgabe des Spielfeldes
 					System.out.println(tServer.toString());
 					//Überprüfung auf Unentschieden oder Sieg
 					if (tServer.getGewonnen() != 0 || !tServer.getEinerKannGewinnen()) {
 						break;
 					}
-					int zug = -1;
+					int zug = 0;
 					while (loop) {
 						try {
+							//Eingabe des Zuges ins Terminal durch den Spieler
 							zug = tServer.readInt("Ihr Zug: ");
 						} catch (Exception e) {
+							//Wenn keine gültige Int-Zahl eigegeben wurde (z.B. ein Char)
 							System.out.println("Bitte geben Sie eine gültige Zahl ein!");
 							continue;
 						}
-						int ret = tServer.setMeinZug(zug);
+						int ret = 0;
+						try {
+							//Der eingegebene Zug wird gesetzt
+							ret = tServer.setMeinZug(zug);
+						} catch (IOException e) {
+							//bei Fehler: ist die Verbindung zum Client abgebrochen. Das Programm wird beendet
+							System.out.println("Verbindung zum ClientSocket verloren");
+							if (tServer.clientSocket != null) {
+								tServer.close();
+							}
+							else {
+								tServer.server.close();
+							}
+							System.exit(-1);
+						}
 						//Rückgabe der SetZugMethode wird analysiert
 						switch(ret) {
+							//Zug wurde korrekt gesetzt. Schleife wird abgebrochen
 							case 0: {
 								loop = false;
 								break;
@@ -106,11 +140,10 @@ public class TicTacToeServer extends TicTacToe{
 		} finally {
 			try {
 				tServer.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			} catch (Exception e) {;}
 		}
 	}
+	
 	/**
 	 * Schließt den internen ServerSocket und ClientSocket
 	 * @throws java.io.IOException
@@ -144,9 +177,13 @@ public class TicTacToeServer extends TicTacToe{
 	 */
 	public int getGegnerZug() throws java.io.IOException {
 		int ret = -3;
+		//wenn client geschlossen ist
 		if (this.clientSocket == null || this.clientSocket.isClosed()) {
+			//Warten auf Verbindungsanfrage des Clients
 			this.clientSocket = this.server.accept();
+			//Input-Stream wird geholt
 			InputStream in = this.clientSocket.getInputStream();
+			//Einlesen des Zuges des Clients
 			int zug = (byte)in.read();
 			ret = this.setZugSpieler1(zug);
 		}
@@ -167,9 +204,15 @@ public class TicTacToeServer extends TicTacToe{
 	 */
 	public int setMeinZug(int zug) throws java.io.IOException {
 		int ret = -3;
+		//Wenn der ClientSocket noch verbunden ist
 		if (this.clientSocket.isConnected()) {
+			//Outputstream wird geholt
 			OutputStream out = this.clientSocket.getOutputStream();
 			ret = this.setZugSpieler2(zug);
+			/*
+			 * Wenn der Zug im Spielfeld des Servers gesetzt werden kann, 
+			 * so wird der Zug dem Client gesendet und das Socket wird geschlossen
+			 */
 			if (ret == 0) {
 				out.write(zug);
 				this.clientSocket.close();

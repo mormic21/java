@@ -20,12 +20,14 @@ public class Bruch {
 		if (nenner == 0) {
 			throw new BruchException("Nenner ist Null");
 		}
+		//setzt die Brucheigenschaften
 		this.zaehler = zaehler;
 		this.nenner = nenner;
 		kuerze();
 	}
 
 	/**
+	 * GetZaehler
 	 * @return the zaehler
 	 */
 	public int getZaehler() {
@@ -33,6 +35,7 @@ public class Bruch {
 	}
 
 	/**
+	 * SetZaehler
 	 * @param zaehler the zaehler to set
 	 */
 	public void setZaehler(int zaehler) {
@@ -41,6 +44,7 @@ public class Bruch {
 	}
 
 	/**
+	 * GetNenner
 	 * @return the nenner
 	 */
 	public int getNenner() {
@@ -96,6 +100,7 @@ public class Bruch {
 	@Override
 	public boolean equals(Object obj) {
 		boolean ret = false;
+		//Bruch leer
 		if (obj == null) {
 			throw new NullPointerException("Zweiter Bruch leer");
 		}

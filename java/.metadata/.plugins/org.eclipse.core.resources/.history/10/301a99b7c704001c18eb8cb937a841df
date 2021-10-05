@@ -1,9 +1,0 @@
-package fressenUndGefressenWerden;
-
-public class Bombe extends BeweglichesBoesesObjekt{
-	
-	public Bombe() {
-		super("bombe.jpg");
-	}
-
-}
