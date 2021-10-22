@@ -6,7 +6,7 @@ import javax.swing.*;
 public class EuroUmrechnerGUI extends JFrame{
 	private JLabel[] jLabels = null;
 	private JTextField[] jTextFields = null;
-	private EuroUmrechner rechner = new EuroUmrechner();
+	private EuroUmrechner rechner = null;
 	
 	public EuroUmrechnerGUI() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -17,6 +17,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		
 		this.jLabels = new JLabel[13];
 		this.jTextFields = new JTextField[13];
+		rechner = new EuroUmrechner();
 		//Euro
 		jLabels[0] = new JLabel();
 		jLabels[0].setBounds(10, 10, (getWidth()/2)-20, 20);
@@ -28,7 +29,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[0].setBounds((getWidth()/2), 10, (getWidth()/2)-20, 25);
 		jTextFields[0].setFont(new Font(null, 0, 17));
 		jTextFields[0].addKeyListener(new MeinTastaturAbhoerer());
-		jTextFields[0].setName("a");
+		jTextFields[0].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[0]);
 		
 		//Oesterreicherische Schilling
@@ -42,6 +43,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[1].setBounds((getWidth()/2), 65, (getWidth()/2)-20, 25);
 		jTextFields[1].setFont(new Font(null, 0, 17));
 		jTextFields[1].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[1].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[1]);
 		
 		//Belgische Franc
@@ -55,6 +57,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[2].setBounds((getWidth()/2), 105, (getWidth()/2)-20, 25);
 		jTextFields[2].setFont(new Font(null, 0, 17));
 		jTextFields[2].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[2].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[2]);
 		
 		//Deutsche Mark
@@ -68,6 +71,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[3].setBounds((getWidth()/2), 145, (getWidth()/2)-20, 25);
 		jTextFields[3].setFont(new Font(null, 0, 17));
 		jTextFields[3].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[3].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[3]);
 		
 		//Spanische Peseten
@@ -81,6 +85,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[4].setBounds((getWidth()/2), 185, (getWidth()/2)-20, 25);
 		jTextFields[4].setFont(new Font(null, 0, 17));
 		jTextFields[4].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[4].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[4]);
 		
 		//Franzoesische Franc
@@ -94,6 +99,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[5].setBounds((getWidth()/2), 225, (getWidth()/2)-20, 25);
 		jTextFields[5].setFont(new Font(null, 0, 17));
 		jTextFields[5].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[5].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[5]);
 		
 		//Irische Pfund
@@ -107,6 +113,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[6].setBounds((getWidth()/2), 265, (getWidth()/2)-20, 25);
 		jTextFields[6].setFont(new Font(null, 0, 17));
 		jTextFields[6].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[6].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[6]);
 		
 		//Italienische Lire
@@ -120,6 +127,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[7].setBounds((getWidth()/2), 305, (getWidth()/2)-20, 25);
 		jTextFields[7].setFont(new Font(null, 0, 17));
 		jTextFields[7].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[7].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[7]);
 		
 		//Luxenburgische Franc
@@ -133,6 +141,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[8].setBounds((getWidth()/2), 345, (getWidth()/2)-20, 25);
 		jTextFields[8].setFont(new Font(null, 0, 17));
 		jTextFields[8].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[8].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[8]);
 		
 		//Niederlaendische Gulden
@@ -146,6 +155,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[9].setBounds((getWidth()/2), 385, (getWidth()/2)-20, 25);
 		jTextFields[9].setFont(new Font(null, 0, 17));
 		jTextFields[9].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[9].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[9]);
 		
 		//Portugiesische Escudos
@@ -159,6 +169,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[10].setBounds((getWidth()/2), 425, (getWidth()/2)-20, 25);
 		jTextFields[10].setFont(new Font(null, 0, 17));
 		jTextFields[10].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[10].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[10]);
 		
 		//Finnmark
@@ -172,6 +183,7 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[11].setBounds((getWidth()/2), 465, (getWidth()/2)-20, 25);
 		jTextFields[11].setFont(new Font(null, 0, 17));
 		jTextFields[11].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[11].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[11]);
 		
 		//Griechische Drachmen
@@ -185,7 +197,10 @@ public class EuroUmrechnerGUI extends JFrame{
 		jTextFields[12].setBounds((getWidth()/2), 505, (getWidth()/2)-20, 25);
 		jTextFields[12].setFont(new Font(null, 0, 17));
 		jTextFields[12].addKeyListener(new MeinTastaturAbhoerer());
+		jTextFields[12].setHorizontalAlignment(SwingConstants.RIGHT);
 		this.getContentPane().add(jTextFields[12]);
+		
+		
 
 	}
 	
@@ -202,14 +217,13 @@ public class EuroUmrechnerGUI extends JFrame{
 			double betrag = 0;
 			try {
 				betrag = Double.parseDouble(jTextFields[rechner.getWaehrung()].getText());
-				System.out.println(betrag);
 				rechner.setBetrag(betrag);
 				for (int i = 0; i < jTextFields.length; i++) {
 					if (i != rechner.getWaehrung()) {
 						jTextFields[i].setText(Double.toString(Math.round(rechner.getBetrag(i)*100.0)/100.0));
 					}
 				}
-			} catch (Exception exc) {
+			} catch (NumberFormatException exc) {
 			}
 		}
 	}
