@@ -1,136 +1,281 @@
 package net.tfobz.vokabeltrainer.guis;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
+import net.sourceforge.jdatepicker.impl.*;
 import net.tfobz.vokabeltrainer.model.*;
+
+import java.util.Enumeration;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
+/**
+ * Edit-GUI
+ * realisiert ein Fenster zum Bearbeiten einer Lernkartei
+ * erbt von JDialog
+ * 
+ * @author Michael Morandell - Elija Innerkofler
+ * @version 1.5 - Erinnerungsintervall kann gesetzt werden
+ */
 public class EditGUI extends JDialog {
 
+	// Membervariablen
+	private int anzahlFaecher = VokabeltrainerDB.getFaecher(VokabeltrainerDB.getLernkarteien().get(MainGUI.getAct_index()).getNummer()).size();
 	private JLabel title = null;
 	private JLabel description = null;
 	private JTextField text1 = null;
-	private JPanel border = null;
+	private JPanel border1 = null;
 	private JLabel first = null;
 	private JTextField text2 = null;
 	private JLabel second = null;
 	private JTextField text3 = null;
-	private JCheckBox checkBox1 = null;
-	private JCheckBox checkBox2 = null;
-	private JCheckBox checkBox3 = null;
 	private JButton back = null;
 	private JButton change = null;
+	private JLabel fach = null;
+	private JSpinner faecherSpinner = null;
+	private JSpinner intervallSpinner = null;
+	private JPanel border2 = null;
+	private JLabel date = null;
+	private JButton save = null;
 
 	public EditGUI(JFrame owner) {
 
+		// Setzen des modalen Fensters
 		super(owner);
 		this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		this.setBounds(owner.getX(), owner.getY(), 500, 410);
+		this.setBounds(owner.getX(), owner.getY(), owner.getWidth(), owner.getHeight());
 		this.setModal(true);
 		this.setResizable(false);
 		this.setTitle("Vokabeltrainer: Lernkartei bearbeiten");
 
+		// Ausschalten des Layoutmanagers
 		this.getContentPane().setLayout(null);
 
+		// Knopfabhörer
+		EditListener a = new EditListener();
+
+		// Titel
 		title = new JLabel();
-		title.setBounds(20, 20, 300, 30);
-		Font font = new Font("Sans Serif", Font.BOLD, 20);
-		title.setFont(font);
+		title.setBounds(45, 35, 300, 30);
 		title.setText("Lernkartei bearbeiten");
+		title.setFont(Variables.TITLE_FONT);
 		this.getContentPane().add(title);
 
+		// Beschreibung
 		description = new JLabel();
-		description.setBounds(20, 65, 100, 20);
+		description.setBounds(45, 95, 200, 25);
 		description.setText("Beschreibung:");
+		description.setFont(Variables.SUBTITLE_FONT);
 		this.getContentPane().add(description);
 
+		// Erstes Textfeld
 		text1 = new JTextField();
-		text1.setBounds(20, 90, 450, 20);
+		text1.setBounds(190, 95, 508, 30);
+		text1.setText(VokabeltrainerDB.getLernkarteien().get(MainGUI.getAct_index()).getBeschreibung());
+		text1.setFont(Variables.DEFAULT_FONT);
+		text1.setBorder(Variables.TEXTFIELD_BORDER);
 		this.getContentPane().add(text1);
 
+		// Erste Wortbeschreibung
 		first = new JLabel();
-		first.setBounds(40, 155, 160, 20);
+		first.setBounds(65, 193, 210, 20);
+		first.setFont(Variables.DEFAULT_FONT);
 		first.setText("Beschreibung erstes Wort:");
 		this.getContentPane().add(first);
-		
+
+		// Zweites Textfeld
 		text2 = new JTextField();
-		text2.setBounds(210, 155, 240, 20);
+		text2.setBounds(280, 189, 400, 30);
+		text2.setText(VokabeltrainerDB.getLernkarteien().get(MainGUI.getAct_index()).getWortEinsBeschreibung());
+		text2.setFont(Variables.DEFAULT_FONT);
+		text2.setBorder(Variables.TEXTFIELD_BORDER);
 		this.getContentPane().add(text2);
-		
+
+		// Zweite Wortbeschreibung
 		second = new JLabel();
-		second.setBounds(40, 190, 160, 20);
+		second.setBounds(65, 247, 210, 20);
+		second.setFont(Variables.DEFAULT_FONT);
 		second.setText("Beschreibung zweites Wort:");
 		this.getContentPane().add(second);
-			
+
+		// Drittes Textfeld
 		text3 = new JTextField();
-		text3.setBounds(210, 190, 240, 20);
+		text3.setBounds(280, 243, 400, 30);
+		text3.setText(VokabeltrainerDB.getLernkarteien().get(MainGUI.getAct_index()).getWortZweiBeschreibung());
+		text3.setFont(Variables.DEFAULT_FONT);
+		text3.setBorder(Variables.TEXTFIELD_BORDER);
 		this.getContentPane().add(text3);
+
+		// Border 1
+		border1 = new JPanel();
+		TitledBorder border1Title = new TitledBorder(new LineBorder(Color.black, 1), "Wort");
+		border1Title.setTitleFont(Variables.SUBTITLE_FONT);
+		border1.setBorder(border1Title);
+		border1.setBounds(45, 150, 660, 150);
+		this.getContentPane().add(border1);
+
+		// Fach
+		fach = new JLabel();
+		fach.setBounds(65, 395, 50, 25);
+		fach.setFont(Variables.SUBTITLE_FONT);
+		fach.setText("Fach:");
+		this.getContentPane().add(fach);
+
+		// Spinner
+		SpinnerModel value = new SpinnerNumberModel(1, 1, anzahlFaecher, 1);
+		faecherSpinner = new JSpinner(value);
+		faecherSpinner.setBounds(125, 394, 70, 30);
+		faecherSpinner.setFont(Variables.DEFAULT_FONT);
+		faecherSpinner.setBorder(Variables.TEXTFIELD_BORDER);
+		faecherSpinner.addChangeListener(new UpdateListener());
+		this.getContentPane().add(faecherSpinner);
+
+		// Datum
+		date = new JLabel();
+		date.setBounds(240, 395, 190, 25);
+		date.setFont(Variables.SUBTITLE_FONT);
+		date.setText("Tage bis Erinnerung:");
+		this.getContentPane().add(date);
 		
-		border = new JPanel();
-		border.setBorder(new TitledBorder(new LineBorder(Color.black, 1), "Wort"));
-		border.setBounds(20, 130, 450, 100);
-		this.getContentPane().add(border);
+		//intervallspinner
+		SpinnerModel value2 = new SpinnerNumberModel(1, 0, 2000, 1);
+		intervallSpinner = new JSpinner(value2);
+		intervallSpinner.setValue(VokabeltrainerDB.getFaecher(VokabeltrainerDB.getLernkarteien().
+					get(MainGUI.getAct_index()).getNummer()).get((int)faecherSpinner.getValue()-1).getErinnerungsIntervall());
+		intervallSpinner.setBounds(440, 394, 70, 30);
+		intervallSpinner.setFont(Variables.DEFAULT_FONT);
+		intervallSpinner.setBorder(Variables.TEXTFIELD_BORDER);
+		this.getContentPane().add(intervallSpinner);
 		
-		checkBox1 = new JCheckBox();
-		checkBox1.setBounds(20, 245, 450, 20);
-		checkBox1.setText("Test");
-		this.getContentPane().add(checkBox1);
+		//save-Button
+		save = new JButton();
+		save.setBounds(550, 391, 120, 36);
+		save.setText("Speichern");
+		save.setFont(Variables.DEFAULT_FONT);
+		save.setBorder(Variables.ROUNDED_BORDER);
+		save.setForeground(Color.BLACK);
+		save.setBackground(Variables.DEFAULT_COLOR);
+		save.addMouseListener(Variables.MOUSEABHOERER);
+		save.addActionListener(a);
+		this.getContentPane().add(save);
 		
-		checkBox2 = new JCheckBox();
-		checkBox2.setBounds(20, 270, 450, 20);
-		checkBox2.setText("Test");
-		this.getContentPane().add(checkBox2);
 		
-		checkBox3 = new JCheckBox();
-		checkBox3.setBounds(20, 300, 450, 20);
-		checkBox3.setText("Groß-/Kleinschreibung beachten");
-		this.getContentPane().add(checkBox3);
-		
+		// Datepicker
+//		UtilDateModel model = new UtilDateModel();
+//		JDatePanelImpl datePanel = new JDatePanelImpl(model);
+//		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel);
+//		datePicker.setBounds(450, 395, 200, 28);
+//		datePicker.setBorder(Variables.TEXTFIELD_BORDER);
+//		this.getContentPane().add(datePicker);
+
+		// Border 2
+		border2 = new JPanel();
+		TitledBorder border2Title = new TitledBorder(new LineBorder(Color.black, 1), "Erinnerungsdatum");
+		border2Title.setTitleFont(Variables.SUBTITLE_FONT);
+		border2.setBorder(border2Title);
+		border2.setBounds(45, 330, 660, 150);
+		this.getContentPane().add(border2);
+
+		// Abbrechen Knopf
 		back = new JButton();
-		back.setBounds(260, 335, 100, 25);
+		back.setBounds(553, 505, 150, 35);
 		back.setText("Abbrechen");
-		back.addActionListener(new EditListener());
+		back.setBorder(Variables.ROUNDED_BORDER);
+		back.setForeground(Color.BLACK);
+		back.setBackground(Variables.DEFAULT_COLOR);
+		back.setFont(Variables.DEFAULT_FONT);
+		back.addActionListener(a);
+		back.addMouseListener(Variables.MOUSEABHOERER);
 		this.getContentPane().add(back);
-		
+
+		// Ändern Knopf
 		change = new JButton();
-		change.setBounds(370, 335, 100, 25);
+		change.setBounds(375, 505, 150, 35);
 		change.setText("Ändern");
-		change.addActionListener(new EditListener());
+		change.setBorder(Variables.ROUNDED_BORDER);
+		change.setForeground(Color.BLACK);
+		change.setBackground(Variables.DEFAULT_COLOR);
+		change.setFont(Variables.DEFAULT_FONT);
+		change.addActionListener(a);
+		change.addMouseListener(Variables.MOUSEABHOERER);
 		this.getContentPane().add(change);
-		
+
 	}
 	
+	/**
+	 * Hoert auf Aenderungen im Spinner
+	 * implementiert CangeListener
+	 * @author Michael Morandell, Elija Innerkofler
+	 *
+	 */
+	private class UpdateListener implements ChangeListener {
+		/**
+		 * stateChanged
+		 * @param e, ChangeEvent
+		 */
+		@Override
+		public void stateChanged(ChangeEvent e) {
+			if ((int)faecherSpinner.getValue()-1 < anzahlFaecher) {
+				intervallSpinner.setValue(VokabeltrainerDB.getFaecher(VokabeltrainerDB.getLernkarteien().
+						get(MainGUI.getAct_index()).getNummer()).get((int)faecherSpinner.getValue()-1).getErinnerungsIntervall());
+			}
+		}
+	}
+	
+	
+	/**
+	 * Wenn aufgerufen, wird ermittelt welcher Knopf gedrückt wurde und die
+	 * jeweilige Funktion ausgeführt
+	 */
 	private class EditListener implements ActionListener {
-
+		/**
+		 * actionPerformed
+		 * @param e, ActionEvent
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			//Abbrechen-Button
 			if (e.getSource().equals(back)) {
 				setVisible(false);
 			}
-			if (e.getSource().equals(change)) {
-				Lernkartei lk = new Lernkartei(text1.getText(), text2.getText(), text3.getText(), true, true);
-				System.out.println(text1.getText());
-				System.out.println(text2.getText());
-				System.out.println(text3.getText());
-				lk.validiere();
-				VokabeltrainerDB.hinzufuegenLernkartei(lk);
-				System.out.println("ok");
-				List<Lernkartei> lernkarteien = VokabeltrainerDB.getLernkarteien();
-				for (Lernkartei lernkartei: lernkarteien)
-					System.out.println(lernkartei);
-				VokabeltrainerDB.hinzufuegenKarte(lk.getNummer(), new Karte(0, "einwort^", "zweiwort", false, false));
-				VokabeltrainerDB.hinzufuegenKarte(lk.getNummer(), new Karte(1, "einwt^", "zweighort", false, false));
-				VokabeltrainerDB.hinzufuegenKarte(lk.getNummer(), new Karte(2, "einwdgfdfort^", "zweort", false, false));
-				VokabeltrainerDB.hinzufuegenKarte(lk.getNummer(), new Karte(3, "eiffnwort^", "zweiwdfort", false, false));
-				int ret = VokabeltrainerDB.exportierenKarten(lk.getNummer(), "C:\\Users\\Michael Morandell\\Downloads\\RohdateienJavaVok\\test.txt", false);
+			//save-Button
+			if (e.getSource().equals(save)) {
+				int fachnummer = VokabeltrainerDB.getFaecher(VokabeltrainerDB.getLernkarteien().get(MainGUI.getAct_index()).getNummer()).
+						get((int)faecherSpinner.getValue()-1).getNummer();
+				Fach f = new Fach(fachnummer, String.valueOf(fachnummer), (int)intervallSpinner.getValue(), VokabeltrainerDB.getDateOneDayBeforeToday());
+				int ret = VokabeltrainerDB.aendernFach(f);
 				System.out.println(ret);
 			}
-			
+			//Edit-Button
+			if (e.getSource().equals(change)) {
+				//neue Lernkartei mit der Nummer der alten Lernkartei
+				Lernkartei lk = new Lernkartei(VokabeltrainerDB.getLernkarteien().get(MainGUI.getAct_index()).getNummer(), 
+						text1.getText(), 
+						text2.getText(), 
+						text3.getText(), 
+						true, 
+						true
+				);
+				//neue Lernkartei ersetzt die alte
+				int ret = VokabeltrainerDB.aendernLernkartei(lk);
+				//Wenn aendernLernkartei -2 zurueck gibt, so wurde eine Eigenschaft nicht richtig eingegeben
+				if (ret == -2) {
+					//Fehlermeldung wird geholt
+					Enumeration<String> errors = lk.getFehler().keys();
+					String errorOutput = "Bitte geben Sie folgende Daten ein:  \n\n";
+					while (errors.hasMoreElements()) {
+						errorOutput = errorOutput + " - "+errors.nextElement().toString() + "\n";
+					}
+					errorOutput = errorOutput + "\n";
+					//Fehlerdialog wird angezeigt
+					JOptionPane.showMessageDialog(EditGUI.this, errorOutput, "Fehler!", JOptionPane.ERROR_MESSAGE);
+				}
+				if (ret == 0) {
+					setVisible(false);
+				}
+			}
 		}
-		
 	}
-
 }
