@@ -98,7 +98,7 @@ public abstract class Konto
 	 */
 	public static void setStartzinssatz(double startzinssatz) throws KontoException {
 		if (startzinssatz < 0)
-			throw new KontoException("Zinssatz muss grösser oder gleich Null sein");
+			throw new KontoException("Startzinssatz muss grösser oder gleich 0 sein");
 		else
 			Konto.startzinssatz = startzinssatz;
 	}
