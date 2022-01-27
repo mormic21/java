@@ -1,11 +1,26 @@
 package net.tfobz.ausdrueckeerw;
 
-public class Potenz extends Operation{
+/**
+ * Potenz
+ * erbt von Operation
+ * @author Michael Morandell
+ *
+ */
+public class Potenz extends Operation {
 	
+	/**
+	 * Potenz-Konstruktor
+	 * @param operand0
+	 * @param operand1
+	 */
 	public Potenz(Operand operand0, Operand operand1) {
 		super(operand0, operand1);
 	}
 	
+	/**
+	 * getErgebnis
+	 * @return double
+	 */
 	@Override
 	public double getErgebnis() {
 		double ret = 0.0;
@@ -16,6 +31,10 @@ public class Potenz extends Operation{
 		return ret;
 	}
 	
+	/**
+	 * toString
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		String ret = null;
@@ -28,5 +47,4 @@ public class Potenz extends Operation{
 				")";
 		return ret;	
 	}
-
 }

@@ -1,5 +1,4 @@
 package net.tfobz.kontoverwaltung;
-
 import java.util.Calendar;
 
 /**

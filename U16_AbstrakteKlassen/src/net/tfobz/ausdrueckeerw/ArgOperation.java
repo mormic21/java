@@ -1,6 +1,13 @@
 package net.tfobz.ausdrueckeerw;
 
+/**
+ * ArgOperation
+ * erbt von Operand
+ * @author Michael Morandell
+ *
+ */
 public abstract class ArgOperation extends Operand {
+	//Membervariablen
 	private Argument argument;
 	private Operand operand;
 	

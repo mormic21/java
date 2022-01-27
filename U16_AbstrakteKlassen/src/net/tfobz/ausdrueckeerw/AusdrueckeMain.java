@@ -12,7 +12,7 @@ public class AusdrueckeMain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-
+		//Operartion
 		Operation o = 
 				new Potenz(
 						new Division(
@@ -45,7 +45,7 @@ public class AusdrueckeMain {
 						),
 				new Konstante(4)
 		);
+		//Ergebnis wird ausgegeben
 		System.out.println(o.toString());
 	}
-
 }

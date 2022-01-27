@@ -1,13 +1,33 @@
 package net.tfobz.ausdrueckeerw;
 
-public class Division extends Operation
-{
+/**
+ * Division
+ * erbt von Operation
+ * @author Michael Morandell
+ *
+ */
+public class Division extends Operation {
+	
+	/**
+	 * Division-Konstruktor
+	 * @param operand0
+	 * @param operand1
+	 */
 	public Division(Operand operand0, Operand operand1) {
 		super(operand0, operand1);
 	}
+	
+	/**
+	 * Division-Konstruktor
+	 */
 	public Division() {
 		super();
 	}
+	
+	/**
+	 * getErgebnis
+	 * @return double
+	 */
 	public double getErgebnis() {
 		double ret = 0.0;
 		if (this.getOperand(0) != null)
@@ -16,6 +36,11 @@ public class Division extends Operation
 			ret = ret / this.getOperand(1).getErgebnis();
 		return ret;
 	}
+	
+	/**
+	 * toString
+	 * @return String
+	 */
 	public String toString() {
 		String ret = null;
 		ret = "("+
@@ -27,5 +52,4 @@ public class Division extends Operation
 				")";
 		return ret;	
 	}
-
 }

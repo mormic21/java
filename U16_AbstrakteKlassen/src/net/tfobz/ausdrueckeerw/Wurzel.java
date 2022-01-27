@@ -1,15 +1,33 @@
 package net.tfobz.ausdrueckeerw;
 
+/**
+ * Wurzel
+ * erbt von ArgOperation
+ * @author Michael Morandell
+ *
+ */
 public class Wurzel extends ArgOperation {
 	
+	/**
+	 * Wurzel-Konstruktor
+	 * @param argument
+	 * @param operand1
+	 */
 	public Wurzel(Argument argument, Operand operand1) {
 		super(argument, operand1);
 	}
+	
+	/**
+	 * Wurzel-Konstuktor
+	 */
 	public Wurzel() {
 		super();
 	}
 	
-	
+	/**
+	 * getErgebnis
+	 * @return double
+	 */
 	@Override
 	public double getErgebnis() {
 		double ret = 0.0;
@@ -20,6 +38,10 @@ public class Wurzel extends ArgOperation {
 		return ret;
 	}
 	
+	/**
+	 * toString
+	 * @return String
+	 */
 	@Override
 	public String toString() {
 		String ret = null;
@@ -32,5 +54,4 @@ public class Wurzel extends ArgOperation {
 				")";
 		return ret;
 	}
-
 }

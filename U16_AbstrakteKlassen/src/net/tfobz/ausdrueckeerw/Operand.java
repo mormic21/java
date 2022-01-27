@@ -1,6 +1,16 @@
 package net.tfobz.ausdrueckeerw;
 
-public abstract class Operand
-{
+/**
+ * Operand
+ * abstrakte Klasse
+ * @author Michael Morandell
+ *
+ */
+public abstract class Operand {
+	/**
+	 * getErgebnis
+	 * abstrakte Methode
+	 * @return double
+	 */
 	public abstract double getErgebnis();
 }

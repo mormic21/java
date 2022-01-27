@@ -7,6 +7,7 @@ package net.tfobz.kontoverwaltung;
  * @author Michael Morandell
  *
  */
+@SuppressWarnings("serial")
 public class KontoException extends Exception {
 	/**
 	 * KontoException-Konstruktor

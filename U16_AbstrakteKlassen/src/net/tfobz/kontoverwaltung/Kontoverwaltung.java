@@ -11,6 +11,7 @@ import javax.swing.*;
  * @author Michael Morandell
  *
  */
+@SuppressWarnings("serial")
 public class Kontoverwaltung extends JFrame {
 	//Membervariablen für Konten
 	private static final int MAX_KONTEN = 100;
@@ -28,6 +29,7 @@ public class Kontoverwaltung extends JFrame {
 	private JButton ueberweisen = null;
 	private JLabel kontonummer1 = new JLabel();
 	private JLabel kontonummer2 = new JLabel();
+	private JScrollPane areaScrollPane = null;
 	private JTextArea area = null;
 	private Font default_font = new Font("Sans Serif", Font.PLAIN, 17);
 	private Font bold_font = new Font("Sans Serif", Font.BOLD, 16);
@@ -129,10 +131,22 @@ public class Kontoverwaltung extends JFrame {
 		
 		//textarea
 		area = new JTextArea();
-		area.setBounds(10, 140, 885, 415);
+		area.setBounds(10, 140, 875, 405);
 		area.setFont(default_font);
 		area.setEditable(false);
-		this.getContentPane().add(area);
+		//automatische newline, wenn text zu lang
+		area.setLineWrap(true);
+		area.setWrapStyleWord(false);
+		//scrollpane
+		areaScrollPane = new JScrollPane(area);
+		//vertikale scorllbar, wenn nötig
+		areaScrollPane.setVerticalScrollBarPolicy(
+		                JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		//horinzontale scrollbar nie
+		areaScrollPane.setHorizontalScrollBarPolicy(
+						JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		areaScrollPane.setBounds(10, 140, 885, 415);
+		this.getContentPane().add(areaScrollPane);
 		
 		//default Button
 		this.getRootPane().setDefaultButton(anzeigen);

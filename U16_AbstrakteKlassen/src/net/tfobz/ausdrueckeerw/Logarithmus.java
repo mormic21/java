@@ -1,5 +1,11 @@
 package net.tfobz.ausdrueckeerw;
 
+/**
+ * Logarithmus
+ * erbt von ArgOperation
+ * @author Michael Morandell
+ *
+ */
 public class Logarithmus extends ArgOperation {
 	
 	/**
