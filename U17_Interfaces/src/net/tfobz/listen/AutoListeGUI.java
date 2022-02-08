@@ -1,20 +1,15 @@
 package net.tfobz.listen;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-
+/**
+ * AutoListeGUI
+ * realisiert eine GUI für die Autoliste
+ * erbt von JFrame
+ * @author Michael Morandell
+ *
+ */
 public class AutoListeGUI extends JFrame {
 	//Membervariablen
 	private MeineDefaultListe autoListe = new MeineDefaultListe();
@@ -30,14 +25,22 @@ public class AutoListeGUI extends JFrame {
 	private Font default_font = new Font("Sans Serif", Font.PLAIN, 17);
 	private Font bold_font = new Font("Sans Serif", Font.BOLD, 17);
 	
+	/**
+	 * AutoListeGUI-Konstruktor
+	 */
 	public AutoListeGUI() {
+		//exit on close
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//berechnung der bounds
 		int height = 190;
 		int width = 390;
 		Dimension screen_size = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setBounds((screen_size.width - width) / 2, (screen_size.height - height) / 2, width, height);
+		//nicht resizable
 		this.setResizable(false);
+		//titel
 		this.setTitle("AutoListe");
+		//layoutmanager null
 		this.getContentPane().setLayout(null);
 		
 		//Name-Label
@@ -104,6 +107,8 @@ public class AutoListeGUI extends JFrame {
 		deleteb.addActionListener(listener);
 		this.getContentPane().add(deleteb);
 		
+		//Default-Button
+		this.getRootPane().setDefaultButton(newb);
 	}
 	
 	/**
@@ -120,10 +125,12 @@ public class AutoListeGUI extends JFrame {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			
 			//Wenn naechster Button gedrueckt wurde
 			if (e.getSource().equals(nextb)) {
 				//wenn liste leer
 				if (autoListe.istLeer()) {
+					//Fehlermeldung an Benutzer
 					JOptionPane.showMessageDialog(
 							AutoListeGUI.this,
 							"Kein nächstes Element vorhanden:\nListe ist leer",
@@ -134,10 +141,15 @@ public class AutoListeGUI extends JFrame {
 				else {
 					boolean weiter = true;
 					try {
+						//Eingaben werden eingelesen
 						int zulassung = Integer.parseInt(zulassungText.getText());
+						//Eingaben werden in ein Auto verwandelt
 						Auto a = new Auto(nameText.getText(), zulassung);
+						//Eigenschaften werden ins aktuelle Auto gesetzt
 						autoIterator.setzenAktuellesElement(a);
+						//bei ungueltigen Eingaben
 					} catch (NumberFormatException err) {
+						//Fehlermeldung an Benutzer
 						JOptionPane.showMessageDialog(
 								AutoListeGUI.this,
 								"Bitte geben sie einen gültigen Wert für Erstzulassung ein!",
@@ -145,40 +157,50 @@ public class AutoListeGUI extends JFrame {
 								JOptionPane.ERROR_MESSAGE);
 						weiter = false;
 					}
+					//Wenn bisher erolgreich
 					if (weiter) {
+						//naechtes Element wird geholt
 						Auto auto = (Auto) autoIterator.naechstesElement();
+						//Ist dieses null, sind wir am ende der liste und wir holen uns das erste Element
 						if (auto == null) {
+							//Meldung an Benutzer
 							JOptionPane.showMessageDialog(
 									AutoListeGUI.this,
 									"Sie haben das Ende der Liste erreicht!",
 									"Ende der Liste",
 									JOptionPane.INFORMATION_MESSAGE);
+							//erstes Element
 							auto = (Auto)autoIterator.naechstesElement();
 						}
-						System.out.println(auto.getName()+", "+auto.getErstzulassung());
+						//Ausgabe der Eigenschaften des Autos
 						nameText.setText(auto.getName());
 						zulassungText.setText(String.valueOf(auto.getErstzulassung()));
 					}
 				}
 			}
+			
 			//Wenn Neu Button gedrueckt wurde
 			if (e.getSource().equals(newb)) {
 				boolean clear = true;
 				//wenn liste leer
 				if (autoListe.istLeer()) {
+					//Erstes Element wird gesetzt, dadurch wird die Liste nicht-leer
 					autoIterator.einfuegenElement(new Auto());
 				}
 				//wenn liste nicht leer
 				else {
 					try {
+						//Eingaben werden eingelesen
 						int zulassung = Integer.parseInt(zulassungText.getText());
+						//Eingaben werden in ein Auto verwandelt
 						Auto a = new Auto(nameText.getText(), zulassung);
-						System.out.println(a.getName()+", "+a.getErstzulassung());
-						boolean ret = autoIterator.setzenAktuellesElement(a);
-						System.out.println("setzen: "+ret);
-						ret = autoIterator.einfuegenElement(new Auto());
-						System.out.println("einfügen: "+ret);
+						//Eigenschaften werden ins aktuelle Auto gesetzt
+						autoIterator.setzenAktuellesElement(a);
+						//Hier wird das neue Element eingefuegt
+						autoIterator.einfuegenElement(new Auto());
+						//bei ungueltigen Eingaben
 					} catch (NumberFormatException err) {
+						//Fehlermeldung an Benutzer
 						JOptionPane.showMessageDialog(
 								AutoListeGUI.this,
 								"Bitte geben sie einen gültigen Wert für Erstzulassung ein!",
@@ -187,14 +209,60 @@ public class AutoListeGUI extends JFrame {
 						clear = false;
 					}
 				}
+				//Wenn keine Falscheingaben, werden die Inhalte der Textfelder gelöscht
 				if (clear) {
 					nameText.setText("");
 					zulassungText.setText("");
 				}
 			}
+			
 			//Wenn Löschen Knopf gedruekt wurde
 			if (e.getSource().equals(deleteb)) {
-				
+				//wenn liste leer
+				if (autoListe.istLeer()) {
+					//Fehlermeldung an Benutzer
+					JOptionPane.showMessageDialog(
+							AutoListeGUI.this,
+							"Löschen nicht möglich:\nListe ist leer",
+							"Liste leer",
+							JOptionPane.ERROR_MESSAGE);
+				}
+				//wenn liste nicht leer
+				else {
+					//aktuelles Element wird gelöscht
+					autoIterator.loeschenAktuellesElement();
+					//Textfelder werden gelöscht
+					nameText.setText("");
+					zulassungText.setText("");
+					//Wenn Liste nach löschen leer
+					if (autoListe.istLeer()) {
+						//Info-Meldung an Benutzer
+						JOptionPane.showMessageDialog(
+								AutoListeGUI.this,
+								"Die Liste ist jetzt leer",
+								"Liste leer",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+					//Wenn Liste nach löschen nicht leer
+					else {
+						//naechstes Auto wird geholt
+						Auto auto = (Auto) autoIterator.naechstesElement();
+						//Ist dieses null, sind wir am ende der liste und wir holen uns das erste Element
+						if (auto == null) {
+							//Meldung an Benutzer
+							JOptionPane.showMessageDialog(
+									AutoListeGUI.this,
+									"Sie haben das Ende der Liste erreicht!",
+									"Ende der Liste",
+									JOptionPane.INFORMATION_MESSAGE);
+							//erstes Element
+							auto = (Auto)autoIterator.naechstesElement();
+						}
+						//Ausgabe der Eigenschaften des Autos
+						nameText.setText(auto.getName());
+						zulassungText.setText(String.valueOf(auto.getErstzulassung()));
+					}
+				}
 			}
 		}
 	}

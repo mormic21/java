@@ -62,14 +62,6 @@ public class MeineDefaultListe implements MeineListe {
 			}
 
 			public Object naechstesElement() {
-				//------------------------------------------------------------------------------
-				try {
-					Auto a = (Auto) this.aktuellesElem.element;
-					System.out.println("naechstes Element: "+a.getName()+", "+a.getErstzulassung());
-				} catch  (NullPointerException e) {
-					System.out.println("naechstes Element: null");
-				};
-				//#################################################################################
 				Object ret = null;
 				if (this.aktuellesElem == null) {
 					if (MeineDefaultListe.this.erstesElem != null) {
@@ -112,22 +104,13 @@ public class MeineDefaultListe implements MeineListe {
 			 * angesprungen wurde
 			 */
 			public boolean setzenAktuellesElement(Object element) {
-				//ret-variable
 				boolean ret = false;
-				//Wenn elemente nicht null sind
-				if (element != null && this.aktuellesElem != null) {
-					this.aktuellesElem = new ListenElement(element, this.aktuellesElem.naechstesElem);
-					//------------------------------------------------------------------------------
-					try {
-						Auto a = (Auto) this.aktuellesElem.element;
-						System.out.println("setzen: "+a.getName()+", "+a.getErstzulassung());
-					} catch  (NullPointerException e) {
-						System.out.println("setzen: null");
-					};
-					//#################################################################################
-					ret = true;
-				}
-				return ret;
+                if (element != null && this.aktuellesElem != null) {
+                	//element wird an stelle gesetzt
+                	this.aktuellesElem.element = element;
+                	ret = true;
+                }
+                return ret;
 			}
 
 			/**
@@ -142,27 +125,41 @@ public class MeineDefaultListe implements MeineListe {
 				boolean ret = false;
 				//solang der iterator gesetzt ist
 				if (this.aktuellesElem != null) {
-					//wenn es ein naechsten element gibt
-					if (hatNaechstesElement()) {
-						this.aktuellesElem = this.aktuellesElem.naechstesElem;
-						this.aktuellesElem.naechstesElem = this.aktuellesElem.naechstesElem.naechstesElem;
-					}
-					//wenn kein naechstes Element
-					else {
-						//naechstes element wird gesucht
-						ListenElement elementPointer = erstesElem;
-						while (elementPointer != null && elementPointer.naechstesElem.equals(aktuellesElem)) {
-							elementPointer = elementPointer.naechstesElem;
+					//zu löschendes Element
+					ListenElement deleted = this.aktuellesElem;
+					//vorheriges Element
+					ListenElement before = MeineDefaultListe.this.erstesElem;
+					//wenn zu löschendes Element das erste Listenelement ist
+					if (deleted == before) {
+						//Wenn in der Liste noch andere Elemente enthält
+						if (MeineDefaultListe.this.erstesElem.naechstesElem != null) {
+							//das neue aktuelle Element ist das erste Element
+							this.aktuellesElem = MeineDefaultListe.this.erstesElem;
+							//erstes Element wird geloescht
+							loeschenErstesElement();
 						}
-						//wenn immer noch null, dann wird element einfach geloescht
-						if(elementPointer.naechstesElem == null) {
-                            loeschenErstesElement();
-                        }else {
-                            elementPointer.naechstesElem = null;
-                        }
+						//Wenn erstes Element das einzige in der Liste ist
+						else {
+							//Liste wird geleert
+							leeren();
+							this.aktuellesElem = null;
+						}
 					}
+					//Wenn das zu löschende Element nicht das 1. Element ist
+					else {
+						//das vorherige Element wird bestimmt
+						while (before != null && before.naechstesElem != deleted) {
+							before = before.naechstesElem;
+						}
+						//das naechste Element ist das Element nach dem geloeschten Element
+						before.naechstesElem = deleted.naechstesElem;
+						//Iterator wird auf das Element davor gesetzt
+						this.aktuellesElem = before;
+					}
+					//Erfolgreich
 					ret = true;
 				}
+				//return
 				return ret;
 			}
 		};
