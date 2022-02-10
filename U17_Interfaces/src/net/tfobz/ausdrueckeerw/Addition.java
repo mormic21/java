@@ -1,11 +1,5 @@
 package net.tfobz.ausdrueckeerw;
 
-import java.util.Enumeration;
-
-import javax.swing.event.TreeModelListener;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-
 /**
  * Addition
  * erbt von Operation
@@ -49,13 +43,18 @@ public class Addition extends Operation {
 	 */
 	public String toString() {
 		String ret = null;
-		ret = "("+
-				this.getOperand(0).toString()+
-				"+"+
-				this.getOperand(1).toString()+
-				"="+
-				this.getErgebnis()+
-				")";
+		if (this.getOperand(0) == null || this.getOperand(1) == null) {
+			ret = "";
+		}
+		else {
+			ret = "("+
+					this.getOperand(0).toString()+
+					"+"+
+					this.getOperand(1).toString()+
+					"="+
+					this.getErgebnis()+
+					")";
+		}
 		return ret;	
 	}
 }

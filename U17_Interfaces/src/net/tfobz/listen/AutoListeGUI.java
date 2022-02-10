@@ -10,6 +10,7 @@ import javax.swing.*;
  * @author Michael Morandell
  *
  */
+@SuppressWarnings("serial")
 public class AutoListeGUI extends JFrame {
 	//Membervariablen
 	private MeineDefaultListe autoListe = new MeineDefaultListe();

@@ -1,5 +1,4 @@
 package net.tfobz.ausdrueckeerw;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -68,7 +67,7 @@ public abstract class ArgOperation extends Operand {
 	}
 	
 	/**
-	 * TreeNode
+	 * TreeNode - Methoden
 	 */
 	
 	/**
@@ -133,7 +132,7 @@ public abstract class ArgOperation extends Operand {
 	 * @return Enumeration
 	 */
 	@Override
-	public Enumeration children() {
+	public Enumeration<TreeNode> children() {
 		List<TreeNode> arrlist = new ArrayList<TreeNode>();
 		arrlist.add(getChildAt(0));
 		arrlist.add(getChildAt(1));

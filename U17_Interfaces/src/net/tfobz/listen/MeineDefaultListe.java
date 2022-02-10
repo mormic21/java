@@ -9,8 +9,7 @@ public class MeineDefaultListe implements MeineListe {
 	private ListenElement erstesElem = null;
 
 	// Lokale Klasse
-	class ListenElement extends Object
-	{
+	class ListenElement extends Object {
 		private Object element = null;
 		private ListenElement naechstesElem = null;
 		private ListenElement(

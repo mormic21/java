@@ -7,13 +7,14 @@ package net.tfobz.ausdrueckeerw.gui;
  *
  */
 public class MathematischeAusdrueckeMain {
-	
 	/**
 	 * Main-Methode
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		//GUI
 		MathematischeAusdrueckeGUI gui = new MathematischeAusdrueckeGUI();
+		//visible
 		gui.setVisible(true);
 	}
 }

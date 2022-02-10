@@ -14,6 +14,7 @@ public class AutoListeGUIMain {
 	public static void main(String[] args) {
 		//neues GUI-Fenster
 		AutoListeGUI autogui = new AutoListeGUI();
+		//visible
 		autogui.setVisible(true);
 	}
 }

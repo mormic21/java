@@ -1,11 +1,9 @@
 package net.tfobz.ausdrueckeerw;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
-
-import javax.swing.tree.TreeNode;
+import javax.swing.tree.*;
 
 /**
  * Achtung: Die Operanden werden immer der Reihe nach in die Operation gehängt. Mit
@@ -84,7 +82,7 @@ public abstract class Operation extends Operand {
 	}
 	
 	/**
-	 * TreeNode
+	 * TreeNode - Methoden
 	 */
 	
 	/**
@@ -144,10 +142,31 @@ public abstract class Operation extends Operand {
 	 * @return Enumeration
 	 */
 	@Override
-	public Enumeration children() {
+	public Enumeration<TreeNode> children() {
 		List<TreeNode> arrlist = new ArrayList<TreeNode>();
 		arrlist.add(getChildAt(0));
 		arrlist.add(getChildAt(1));
 		return Collections.enumeration(arrlist);
+	}
+	
+	/**
+	 * insert
+	 * @param child, MutableTreeNode
+	 * @param index, int
+	 */
+	@Override
+	public void insert(MutableTreeNode child, int index) {
+		this.setOperand((Operand)child);
+		//set Parent of child
+		child.setParent(this);
+	}
+	
+	/**
+	 * remove at index
+	 * @param index, int
+	 */
+	@Override
+	public void remove(int index) {
+		this.loescheOperand(index);
 	}
 }

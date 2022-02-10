@@ -12,6 +12,7 @@ public class CompareToTestprogramm {
 	 * Main
 	 * @param args
 	 */
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		//Groesse-Array
 		Groesse [] g = new Groesse[10];

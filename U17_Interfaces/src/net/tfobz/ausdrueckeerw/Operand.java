@@ -1,11 +1,6 @@
 package net.tfobz.ausdrueckeerw;
 import java.util.Enumeration;
-
-import javax.swing.event.TreeModelListener;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 
 /**
  * Operand
@@ -13,7 +8,9 @@ import javax.swing.tree.TreePath;
  * @author Michael Morandell
  *
  */
-public abstract class Operand implements TreeNode {
+public abstract class Operand implements TreeNode, MutableTreeNode {
+	//parent-Object vom Typ MutableTreeNode
+	protected MutableTreeNode parent = null;
 	
 	/**
 	 * getErgebnis
@@ -23,15 +20,69 @@ public abstract class Operand implements TreeNode {
 	public abstract double getErgebnis();
 	
 	/**
-	 * TreeNode
+	 * MutableTreeNode - Methoden
+	 */
+
+	/**
+	 * insert
+	 * implemented in Operation
+	 */
+	@Override
+	public void insert(MutableTreeNode child, int index) {
+	}
+
+	/**
+	 * remove at index
+	 * implemented in Operation
+	 */
+	@Override
+	public void remove(int index) {
+	}
+
+	/**
+	 * remove node
+	 * not implemented
+	 */
+	@Override
+	public void remove(MutableTreeNode node) {
+	}
+
+	/**
+	 * setUserObject
+	 * implemented in Konstante
+	 */
+	@Override
+	public void setUserObject(Object object) {
+	}
+
+	/**
+	 * removeFromParent
+	 * not implemented
+	 */
+	@Override
+	public void removeFromParent() {
+	}
+
+	/**
+	 * setParent
+	 * @param newParent, MutableTreeNode
+	 */
+	@Override
+	public void setParent(MutableTreeNode newParent) {
+		this.parent = newParent;
+	}
+	
+	/**
+	 * TreeNode - Methoden
 	 */
 	
 	/**
-	 * getParent()
+	 * getParent
+	 * @return the Parent as Treenode
 	 */
 	@Override
 	public TreeNode getParent() {
-		return null;
+		return this.parent;
 	}
 	
 	/**
@@ -54,11 +105,11 @@ public abstract class Operand implements TreeNode {
 
 	/**
 	 * gibt Children als Enumeration zurueck
-	 * wird in Operation+ArgOperation ueberschrieben
+	 * implemented in Operation
 	 * @return Enumeration
 	 */
 	@Override
-	public Enumeration children() {
+	public Enumeration<TreeNode> children() {
 		return null;
 	}
 }

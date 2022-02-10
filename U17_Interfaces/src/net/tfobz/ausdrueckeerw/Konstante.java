@@ -1,5 +1,4 @@
 package net.tfobz.ausdrueckeerw;
-
 import javax.swing.tree.TreeNode;
 
 /**
@@ -52,6 +51,10 @@ public class Konstante extends Operand {
 	}
 	
 	/**
+	 * TreeNode - Methoden
+	 */
+	
+	/**
 	 * Returns the child TreeNode at index childIndex.
 	 * @param childIndex, int
 	 * @return TreeNode
@@ -70,8 +73,6 @@ public class Konstante extends Operand {
 		return 0;
 	}
 	
-	
-	
 	/**
 	 * getIndex
 	 * gibt immer 0 zurueck, da keine children
@@ -81,5 +82,24 @@ public class Konstante extends Operand {
 	@Override
 	public int getIndex(TreeNode node) {
 		return 0;
+	}
+	
+	/**
+	 * MutableTreeNode - Methoden
+	 */
+	
+	/**
+	 * setUserObject
+	 * setzt den Wert des Objects in die Konstante
+	 * @param object, Object
+	 */
+	@Override
+	public void setUserObject(Object object) {
+		try {
+			this.setErgebnis(Double.parseDouble(object.toString()));
+		}
+		catch (Exception e) {
+			System.out.println("Konstante: Falscheingabe");
+		}
 	}
 }

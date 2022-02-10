@@ -6,5 +6,10 @@ package net.tfobz.funktion;
  *
  */
 public interface Funktion {
+	/**
+	 * abstrakte Methode compute
+	 * @param x
+	 * @return double
+	 */
 	public double compute(double x);
 }

@@ -14,6 +14,7 @@ import net.tfobz.ausdrueckeerw.*;
  * @author Michael Morandell
  *
  */
+@SuppressWarnings("serial")
 public class MeinTreeCellRenderer extends DefaultTreeCellRenderer {
 	//iconName
 	String iconName = null;
